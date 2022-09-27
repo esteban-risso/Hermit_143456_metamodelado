@@ -17,7 +17,7 @@ public class MetamodellingTests extends TestCase {
 	protected void setUp() {
 		testCasesPath = "ontologias/";
 		// Absolute path for windows
-		testCasesPath = "file:///C:/Users/Bruno/Documents/GitHub/ProyGrado_Hermit_143456/ontologias/";
+		testCasesPath = "file:///C:/Users/Esteban/git/Hermit_143456_metamodelado/ontologias/";
 		flags = new ArrayList<String>();
 		flags.add("-c");
 		flagsCount = 1;

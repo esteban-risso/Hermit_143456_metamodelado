@@ -32,14 +32,16 @@ public final class MetamodellingManager {
 	}
 	
 	public boolean checkEqualMetamodellingRuleIteration(Node node0, Node node1) {
+		// node0 = m A1, node0 = m A2, ... , node0 = m An -> [A1,A2, ... ,An]
 		List<OWLClassExpression> node0Classes = MetamodellingAxiomHelper.getMetamodellingClassesByIndividual(this.m_tableau.getNodeToMetaIndividual().get(node0.getNodeID()), this.m_tableau.getPermanentDLOntology());
+		// node1 = m B1, node0 = m B2, ... , node0 = m Bn -> [B1,B2, ... ,Bn]
 		List<OWLClassExpression> node1Classes = MetamodellingAxiomHelper.getMetamodellingClassesByIndividual(this.m_tableau.getNodeToMetaIndividual().get(node1.getNodeID()), this.m_tableau.getPermanentDLOntology());
 		if (!node0Classes.isEmpty() && !node1Classes.isEmpty()) {	
 			for (OWLClassExpression node0Class : node0Classes) {
 				for (OWLClassExpression node1Class : node1Classes) {
-					// <#B>(X) :- <#A>(X)
-					// <#A>(X) :- <#B>(X)
+					// check if <#A>(X) :- <#B>(X), <#B>(X) :- <#A>(X) are not in m_dlClauses
 					if (node1Class != node0Class && (!MetamodellingAxiomHelper.containsSubClassOfAxiom( node0Class, node1Class, this.m_tableau.getPermanentDLOntology()) || !MetamodellingAxiomHelper.containsSubClassOfAxiom(node1Class, node0Class, this.m_tableau.getPermanentDLOntology()))) {
+						// add <#A>(X) :- <#B>(X), <#B>(X) :- <#A>(X) in m_dlClauses
 						MetamodellingAxiomHelper.addSubClassOfAxioms(node0Class, node1Class, this.m_tableau.getPermanentDLOntology(), this.m_tableau);
 						return true;
 					}
@@ -78,17 +80,25 @@ public final class MetamodellingManager {
 		Node node0Equivalent = node0.getCanonicalNode();
 		Node node1Equivalent = node1.getCanonicalNode();
 		if (!this.m_tableau.areDifferentIndividual(node0Equivalent, node1Equivalent) && !this.m_tableau.areSameIndividual(node0Equivalent, node1Equivalent) && !this.m_tableau.alreadyCreateDisjunction(node0Equivalent, node1Equivalent)) {
+			
+			// <#node0Equivalent> == <#node1Equivalent>
 			Atom eqAtom = Atom.create(Equality.INSTANCE, this.m_tableau.getMapNodeIndividual().get(node0Equivalent.getNodeID()), this.m_tableau.getMapNodeIndividual().get(node1Equivalent.getNodeID()));
+			// ==
 			DLPredicate equalityPredicate = eqAtom.getDLPredicate();
+			// <#node0Equivalent> != <#node1Equivalent>
 			Atom ineqAtom = Atom.create(Inequality.INSTANCE, this.m_tableau.getMapNodeIndividual().get(node0Equivalent.getNodeID()), this.m_tableau.getMapNodeIndividual().get(node1Equivalent.getNodeID()));
+			// !=
 			DLPredicate inequalityPredicate = ineqAtom.getDLPredicate();
+			// [==,!=]
 			DLPredicate[] dlPredicates = new DLPredicate[] {equalityPredicate, inequalityPredicate};			
 			int hashCode = 0;
             for (int disjunctIndex = 0; disjunctIndex < dlPredicates.length; ++disjunctIndex) {
                 hashCode = hashCode * 7 + dlPredicates[disjunctIndex].hashCode();
             }
-			GroundDisjunctionHeader gdh = new GroundDisjunctionHeader(dlPredicates, hashCode , null);
+            // == (0) \/ != (0)
+            GroundDisjunctionHeader gdh = new GroundDisjunctionHeader(dlPredicates, hashCode , null);
 			DependencySet dependencySet = this.m_tableau.m_dependencySetFactory.getActualDependencySet();
+			// node0Equivalent == node1Equivalent v !=(node0Equivalent,node1Equivalent)
 			GroundDisjunction groundDisjunction = new GroundDisjunction(this.m_tableau, gdh, new Node[] {node0Equivalent, node1Equivalent, node0Equivalent, node1Equivalent}, new boolean[] {true, true}, dependencySet);
 			if (!this.m_tableau.alreadyCreateDisjunction(node0Equivalent, node1Equivalent) && !groundDisjunction.isSatisfied(this.m_tableau)) {
 				this.m_tableau.addGroundDisjunction(groundDisjunction);
@@ -124,11 +134,14 @@ public final class MetamodellingManager {
     		for (Node node1 : this.m_tableau.metamodellingNodes) {
     			Node node0Eq = node0.getCanonicalNode();
     			Node node1Eq = node1.getCanonicalNode();
-				List<String> propertiesRForEqNodes = getObjectProperties(node0Eq, node1Eq);
+    			// R1(node0Eq,node1Eq), ... , Rn(node0Eq,node1Eq) -> list = [R1, ... ,Rn]
+    			List<String> propertiesRForEqNodes = getObjectProperties(node0Eq, node1Eq);
+				// R / MetaRule(R,S) and R not in list
     			String propertyRString = meetCloseMetaRuleCondition(propertiesRForEqNodes);
     			if (!propertyRString.equals("")) {
     				if (!isCloseMetaRuleDisjunctionAdded(propertyRString, node0Eq, node1Eq)) {
-	    				GroundDisjunction groundDisjunction = createCloseMetaRuleDisjunction(propertyRString, node0Eq, node1Eq);
+    					// <#R> v <~#R>
+    					GroundDisjunction groundDisjunction = createCloseMetaRuleDisjunction(propertyRString, node0Eq, node1Eq);
 	    				if (!groundDisjunction.isSatisfied(this.m_tableau)) {
     						this.m_tableau.addGroundDisjunction(groundDisjunction);
     							return true;
@@ -165,8 +178,10 @@ public final class MetamodellingManager {
     	return new ArrayList<String>(objectProperties);
     }
 	
+	// chequea si la disjuncion esta o no.
 	private boolean isCloseMetaRuleDisjunctionAdded(String propertyRString, Node node0, Node node1) {
-    	if (this.m_tableau.closeMetaRuleDisjunctionsMap.containsKey(propertyRString)) {
+		// mapa de disjunciones.
+		if (this.m_tableau.closeMetaRuleDisjunctionsMap.containsKey(propertyRString)) {
     		for (Map.Entry<Node, Node> nodePair : this.m_tableau.closeMetaRuleDisjunctionsMap.get(propertyRString)) {
     			if (nodePair.getKey().m_nodeID == node0.m_nodeID && nodePair.getValue().m_nodeID == node1.m_nodeID) {
     				return true;
@@ -180,31 +195,47 @@ public final class MetamodellingManager {
     }
     
     private GroundDisjunction createCloseMetaRuleDisjunction(String propertyRString, Node node0Eq, Node node1Eq) {
+    	// R
     	propertyRString = propertyRString.substring(1, propertyRString.length()-1);
-		AtomicRole newProperty = AtomicRole.create("~"+propertyRString);
-		AtomicRole propertyR = AtomicRole.create(propertyRString);    				
-		Atom relationR = Atom.create(propertyR, (Term)this.m_tableau.mapNodeIndividual.get(node0Eq.m_nodeID), (Term)this.m_tableau.mapNodeIndividual.get(node1Eq.m_nodeID));	
-		DLPredicate relationRPredicate = relationR.getDLPredicate();
-		Atom newRelationR = Atom.create(newProperty, (Term)this.m_tableau.mapNodeIndividual.get(node0Eq.m_nodeID), (Term)this.m_tableau.mapNodeIndividual.get(node1Eq.m_nodeID));	
-		DLPredicate newRelationRPredicate = newRelationR.getDLPredicate();
-		DLPredicate[] dlPredicates = new DLPredicate[] {relationRPredicate, newRelationRPredicate};
+		// <~#R>
+    	AtomicRole newProperty = AtomicRole.create("~"+propertyRString);
+    	// <#R>
+    	AtomicRole propertyR = AtomicRole.create(propertyRString);    				
+		// <#R> (node0Eq,node1Eq)
+    	Atom relationR = Atom.create(propertyR, (Term)this.m_tableau.mapNodeIndividual.get(node0Eq.m_nodeID), (Term)this.m_tableau.mapNodeIndividual.get(node1Eq.m_nodeID));	
+		// #R
+    	DLPredicate relationRPredicate = relationR.getDLPredicate();
+		// <~#R> (node0Eq,node1Eq)
+    	Atom newRelationR = Atom.create(newProperty, (Term)this.m_tableau.mapNodeIndividual.get(node0Eq.m_nodeID), (Term)this.m_tableau.mapNodeIndividual.get(node1Eq.m_nodeID));	
+		// ~#R
+    	DLPredicate newRelationRPredicate = newRelationR.getDLPredicate();
+		// [#R,~#R]
+    	DLPredicate[] dlPredicates = new DLPredicate[] {relationRPredicate, newRelationRPredicate};
 		int hashCode = 0;
         for (int disjunctIndex = 0; disjunctIndex < dlPredicates.length; ++disjunctIndex) {
             hashCode = hashCode * 7 + dlPredicates[disjunctIndex].hashCode();
         }    	            
-		GroundDisjunctionHeader gdh = new GroundDisjunctionHeader(dlPredicates, hashCode , null);
+        // #R (0) \/ ~#R (0)
+        GroundDisjunctionHeader gdh = new GroundDisjunctionHeader(dlPredicates, hashCode , null);
 		DependencySet dependencySet = this.m_tableau.m_dependencySetFactory.getActualDependencySet();
+		// <#R> (node0Eq,node1Eq) v <~#R> (node0Eq,node1Eq)
 		GroundDisjunction groundDisjunction = new GroundDisjunction(this.m_tableau, gdh, new Node[] {node0Eq, node1Eq, node0Eq, node1Eq}, new boolean[] {true, true}, dependencySet);
 		return groundDisjunction;
     }
     
     protected boolean checkMetaRule() {
+    	// iteration over axioms Metamodelling(<#a> <#A>)
     	for (OWLMetamodellingAxiom metamodellingAxiom : this.m_tableau.m_permanentDLOntology.getMetamodellingAxioms()) {
+    		// return the metamodelling node associated with the individual <#a> / Metamodelling(<#a> <#A>)
     		Node metamodellingNode = getMetamodellingNodeFromIndividual(metamodellingAxiom.getMetamodelIndividual());
+    		// iteration over axioms MetaRule (<#R> <#S>)
     		for (OWLMetaRuleAxiom mrAxiom : this.m_tableau.m_permanentDLOntology.getMetaRuleAxioms()) {
+    			// <#R>
     			String metaRulePropertyR = mrAxiom.getPropertyR().toString();
+    			// R(a,b1), R(a,b2), ... , R(a,bn) and bi = m Bi -> [b1,b2, ... ,bn] 
     			List<Node> relatedNodes = this.m_tableau.getRelatedNodes(metamodellingNode, metaRulePropertyR);
     			if (relatedNodes.size() > 0) {
+    				// b1 = m B1, b2 = m B2, ... , bn = m Bn -> [B1,B2, ... ,Bn]
     				List<String> classesImageForMetamodellingNode = getNodesClasses(relatedNodes);
     				if (!classesImageForMetamodellingNode.isEmpty() && !MetamodellingAxiomHelper.containsMetaRuleAddedAxiom(metamodellingAxiom.getModelClass().toString(), mrAxiom.getPropertyS().toString(), classesImageForMetamodellingNode, this.m_tableau)) {
     					MetamodellingAxiomHelper.addMetaRuleAddedAxiom(metamodellingAxiom.getModelClass().toString(), mrAxiom.getPropertyS().toString(), classesImageForMetamodellingNode, this.m_tableau);
@@ -218,7 +249,9 @@ public final class MetamodellingManager {
     
     public Node getMetamodellingNodeFromIndividual(OWLIndividual individual) {
     	int nodeId = -1;
+    	// recorre nodeToIndividual para encontrar el individuo pasado como parametro.
     	for (int metamodellingNodeId : this.m_tableau.nodeToMetaIndividual.keySet()) {
+    		// nodeToMetaIndividual[metamodellingNodeId] == individual (<#a1>)
     		if (this.m_tableau.nodeToMetaIndividual.get(metamodellingNodeId).toString().equals(individual.toString())) {
     			nodeId = metamodellingNodeId;
     		}
@@ -231,6 +264,7 @@ public final class MetamodellingManager {
     	return null;
     }
     
+    // dado [b1,b2 ... ,bn] retorna [B1,B2, ... ,BN] / b1 = m B1, b2 = m B2, ... , bn = m Bn
     private List<String> getNodesClasses(List<Node> nodes) {
     	List<String> classes = new ArrayList<String>();
     	for (Node node : nodes) {
@@ -247,6 +281,8 @@ public final class MetamodellingManager {
     	return classes;
     }
     
+	// retorna la propiedad R de un axioma MetaRule(R,S)/ R y ~R no se encuntre en el conjunto
+	// de propiedades pasados por parametro. Dicha propiedad va a ser usada para crear la disyuncion (R v ~R).
     private String meetCloseMetaRuleCondition(List<String> propertiesRForEqNodes) {
     	for (OWLMetaRuleAxiom mrAxiom : this.m_tableau.m_permanentDLOntology.getMetaRuleAxioms()) {
     		String metaRulePropertyR = mrAxiom.getPropertyR().toString();

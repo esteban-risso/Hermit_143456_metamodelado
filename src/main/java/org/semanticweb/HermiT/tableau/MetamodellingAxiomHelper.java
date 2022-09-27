@@ -71,6 +71,7 @@ public class MetamodellingAxiomHelper {
 		return instances;
 	}
 	
+	// retorna las clases que estan en metamodelling con el individuo pasado como parametro
 	public static List<OWLClassExpression> getMetamodellingClassesByIndividual(Individual ind, DLOntology ontology) {
 		List<OWLClassExpression> classes = new ArrayList<OWLClassExpression>();
 		if (ind != null) {
@@ -86,26 +87,33 @@ public class MetamodellingAxiomHelper {
 	public static void addMetaRuleAddedAxiom(String classA, String propertyS, List<String> classesFromImage, Tableau tableau) {
 		String defClass = DEF_STRING + getNextDef(tableau.getPermanentDLOntology()) + ">";
 		
+		// <internal:def#i>(Y)
 		Atom defAtomY = Atom.create(AtomicConcept.create(defClass.substring(1, defClass.length()-1)), Variable.create("Y"));
+		// <#A>(X)
 		Atom classAAtom = Atom.create(AtomicConcept.create(classA.substring(1, classA.length()-1)), Variable.create("X"));
+		// <#S>(X,Y)
 		Atom propertySAtom = Atom.create(AtomicRole.create(propertyS.substring(1, propertyS.length()-1)), Variable.create("X"), Variable.create("Y"));
 		
 		Atom[] headAtoms1 = {defAtomY};
 		Atom[] bodyAtoms1 = {classAAtom, propertySAtom};
 		
+		// <internal:def#i>(Y) :- <#A>(X), <#S>(X,Y)
 		DLClause dlClause1 = DLClause.create(headAtoms1, bodyAtoms1);
 		
 		List<Atom> headAtoms2List = new ArrayList<Atom>();
 		for (String classFromImage : classesFromImage) {
 			Atom classFromImageAtom = Atom.create(AtomicConcept.create(classFromImage.substring(1, classFromImage.length()-1)), Variable.create("X"));
+			//headAtoms2List.add(<#classFromImage>(X))
 			headAtoms2List.add(classFromImageAtom);
 		}
 		
+		// <internal:def#i>(X)
 		Atom defAtomX = Atom.create(AtomicConcept.create(defClass.substring(1, defClass.length()-1)), Variable.create("X"));
 		
 		Atom[] headAtoms2 = headAtoms2List.toArray(new Atom[0]);
 		Atom[] bodyAtoms2 = {defAtomX};
 		
+		//<#classFromImage>(X) v <#classFromImage>(X) v .... :- <internal:def#i>(X)
 		DLClause dlClause2 = DLClause.create(headAtoms2, bodyAtoms2);
 		
 		tableau.getPermanentDLOntology().getDLClauses().add(dlClause1);
@@ -256,17 +264,21 @@ public class MetamodellingAxiomHelper {
 	
 	public static boolean addSubClassOfAxioms(OWLClassExpression classA, OWLClassExpression classB, DLOntology ontology, Tableau tableau) {
 		
+		// <#A>(X)
 		Atom classAAtom = Atom.create(AtomicConcept.create(classA.toString().substring(1, classA.toString().length()-1)), Variable.create("X"));
+		// <#B>(X)
 		Atom classBAtom = Atom.create(AtomicConcept.create(classB.toString().substring(1, classB.toString().length()-1)), Variable.create("X"));
 		
 		Atom[] headAtoms1 = {classAAtom};
 		Atom[] bodyAtoms1 = {classBAtom};
 		
+		// <#A>(X) :- <#B>(X)
 		DLClause dlClause1 = DLClause.create(headAtoms1, bodyAtoms1);
 		
 		Atom[] headAtoms2 = {classBAtom};
 		Atom[] bodyAtoms2 = {classAAtom};
 		
+		// <#B>(X) :- <#A>(X)
 		DLClause dlClause2 = DLClause.create(headAtoms2, bodyAtoms2);
 		
 		ontology.getDLClauses().add(dlClause1);

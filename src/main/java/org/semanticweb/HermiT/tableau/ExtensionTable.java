@@ -81,6 +81,7 @@ implements Serializable {
             this.m_tableau.m_descriptionGraphManager.descriptionGraphTupleAdded(tupleIndex, tuple);
         }
         this.m_tableau.m_clashManager.tupleAdded(this, tuple, dependencySet);
+        // tuple con R(a,b) o !=(a,b) o ~R(a,b)
         if (tuple.length>2 && tuple[1] instanceof Node && tuple[2] instanceof Node) {
         	Node node0 = (Node) tuple[1];
         	Node node1 = (Node) tuple[2];
@@ -89,6 +90,11 @@ implements Serializable {
             	this.m_tableau.differentIndividualsMap.putIfAbsent(node0.m_nodeID, new ArrayList<Integer>());
             	this.m_tableau.differentIndividualsMap.get(node0.m_nodeID).add(node1.m_nodeID);
             } else {
+            	// ACA VOY A PONER nodeRelations.putIfAbsent(aR, new HashMap<String,String>());
+            	// y de ser posible tambien
+            	// aRnode2 : si node2 no es metamodelling nodeRelations.get(node1+relation).putIfAbsent(node2, null);
+        		// aRnode2 : si node2 es metamodelling, node2 = m NODE2 nodeRelations.get(node1+relation).putIfAbsent(node2, classImg);
+            	// ACA ES DONDE AGREGA R(a,b) o ~R(a,b)
             	this.m_tableau.nodeProperties.putIfAbsent(node0.m_nodeID, new HashMap<Integer, List<String>>());
 				this.m_tableau.nodeProperties.get(node0.m_nodeID).putIfAbsent(node1.m_nodeID, new ArrayList<String>());
 				this.m_tableau.nodeProperties.get(node0.m_nodeID).get(node1.m_nodeID).add(tuple[0].toString());
