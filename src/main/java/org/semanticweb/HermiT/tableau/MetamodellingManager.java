@@ -247,6 +247,7 @@ public final class MetamodellingManager {
     	return false;
     }
     
+    // retorna el metamodellingNode asociado al individuo pasado por parametro en caso de existir.
     public Node getMetamodellingNodeFromIndividual(OWLIndividual individual) {
     	int nodeId = -1;
     	// recorre nodeToIndividual para encontrar el individuo pasado como parametro.

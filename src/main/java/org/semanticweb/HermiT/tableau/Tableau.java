@@ -85,6 +85,7 @@ implements Serializable {
     
     protected Map<Integer,Map<String, List<Integer>>> nodeRelations;
     protected Map<Integer,String> classOfMetamodellingAxiom;
+    protected Map<String,Integer> metaIndividualToNodeID;
 
 
     public Tableau(InterruptFlag interruptFlag, TableauMonitor tableauMonitor, ExistentialExpansionStrategy existentialsExpansionStrategy, boolean useDisjunctionLearning, DLOntology permanentDLOntology, DLOntology additionalDLOntology, Map<String, Object> parameters) {
@@ -132,6 +133,7 @@ implements Serializable {
             this.nodeProperties = new HashMap<Integer,Map<Integer, List<String>>>();
             this.nodeRelations = new HashMap<Integer,Map<String, List<Integer>>>();
             this.classOfMetamodellingAxiom = new HashMap<Integer, String>();
+            this.metaIndividualToNodeID = new HashMap<String, Integer>();
             
             BranchedHyperresolutionManager branchedHypM = new BranchedHyperresolutionManager();
             branchedHypM.setHyperresolutionManager(this.m_permanentHyperresolutionManager);
@@ -349,6 +351,7 @@ implements Serializable {
             	termsToNodes.put(ind, node);
         	}
         	this.mapNodeIndividual.put(termsToNodes.get(ind).m_nodeID, ind);
+        	this.metaIndividualToNodeID.put(ind.toString(), termsToNodes.get(ind).m_nodeID);
         	this.nodeToMetaIndividual.put(termsToNodes.get(ind).m_nodeID, ind);
         	this.mapNodeIdtoNodes.put(termsToNodes.get(ind).m_nodeID, termsToNodes.get(ind));
         	this.metamodellingNodes.add(termsToNodes.get(ind));
