@@ -84,6 +84,8 @@ implements Serializable {
     protected boolean metamodellingFlag;
     
     protected Map<Integer,Map<String, List<Integer>>> nodeRelations;
+    protected Map<Integer,String> classOfMetamodellingAxiom;
+
 
     public Tableau(InterruptFlag interruptFlag, TableauMonitor tableauMonitor, ExistentialExpansionStrategy existentialsExpansionStrategy, boolean useDisjunctionLearning, DLOntology permanentDLOntology, DLOntology additionalDLOntology, Map<String, Object> parameters) {
         if (additionalDLOntology != null && !additionalDLOntology.getAllDescriptionGraphs().isEmpty()) {
@@ -129,6 +131,7 @@ implements Serializable {
             this.differentIndividualsMap = new HashMap<Integer,List<Integer>>();
             this.nodeProperties = new HashMap<Integer,Map<Integer, List<String>>>();
             this.nodeRelations = new HashMap<Integer,Map<String, List<Integer>>>();
+            this.classOfMetamodellingAxiom = new HashMap<Integer, String>();
             
             BranchedHyperresolutionManager branchedHypM = new BranchedHyperresolutionManager();
             branchedHypM.setHyperresolutionManager(this.m_permanentHyperresolutionManager);
@@ -349,6 +352,7 @@ implements Serializable {
         	this.nodeToMetaIndividual.put(termsToNodes.get(ind).m_nodeID, ind);
         	this.mapNodeIdtoNodes.put(termsToNodes.get(ind).m_nodeID, termsToNodes.get(ind));
         	this.metamodellingNodes.add(termsToNodes.get(ind));
+        	this.classOfMetamodellingAxiom.put(termsToNodes.get(ind).m_nodeID, metamodellingAxiom.getModelClass().toString());
         }
         if (loadPermanentABox) {
             for (Atom atom : this.m_permanentDLOntology.getPositiveFacts()) {
