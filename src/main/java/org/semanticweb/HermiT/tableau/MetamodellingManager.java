@@ -268,15 +268,7 @@ public final class MetamodellingManager {
     private List<String> getNodesClasses(List<Node> nodes) {
     	List<String> classes = new ArrayList<String>();
     	for (Node node : nodes) {
-    		int nodeId = node.m_nodeID;
-    		if (this.m_tableau.nodeToMetaIndividual.containsKey(nodeId)) {
-    			Individual individual = this.m_tableau.nodeToMetaIndividual.get(nodeId);
-    			for (OWLMetamodellingAxiom metamodellingAxiom : this.m_tableau.m_permanentDLOntology.getMetamodellingAxioms()) {
-    				if (metamodellingAxiom.getMetamodelIndividual().toString().equals(individual.toString())) {
-    					classes.add(metamodellingAxiom.getModelClass().toString());
-    				}
-    			}
-    		}
+    		classes.add(this.m_tableau.classOfMetamodellingAxiom.get(node.m_nodeID));
     	}
     	return classes;
     }
