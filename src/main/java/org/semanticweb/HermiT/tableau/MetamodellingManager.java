@@ -247,22 +247,9 @@ public final class MetamodellingManager {
     	return false;
     }
     
-    // retorna el metamodellingNode asociado al individuo pasado por parametro en caso de existir.
+    // retorna el metamodellingNode asociado al individuo pasado por parametro e.
     public Node getMetamodellingNodeFromIndividual(OWLIndividual individual) {
-    	int nodeId = -1;
-    	// recorre nodeToIndividual para encontrar el individuo pasado como parametro.
-    	for (int metamodellingNodeId : this.m_tableau.nodeToMetaIndividual.keySet()) {
-    		// nodeToMetaIndividual[metamodellingNodeId] == individual (<#a1>)
-    		if (this.m_tableau.nodeToMetaIndividual.get(metamodellingNodeId).toString().equals(individual.toString())) {
-    			nodeId = metamodellingNodeId;
-    		}
-    	}
-    	for (Node metamodellingNode : this.m_tableau.metamodellingNodes) {
-    		if (nodeId == metamodellingNode.m_nodeID) {
-    			return metamodellingNode;
-    		}
-    	}
-    	return null;
+    	return this.m_tableau.mapNodeIdtoNodes.get(this.m_tableau.metaIndividualToNodeID.get(individual.toString()));
     }
     
     // dado [b1,b2 ... ,bn] retorna [B1,B2, ... ,BN] / b1 = m B1, b2 = m B2, ... , bn = m Bn
