@@ -82,6 +82,8 @@ implements Serializable {
     protected Map<Integer,List<Integer>> differentIndividualsMap;
     protected Map<Integer,Map<Integer, List<String>>> nodeProperties;
     protected boolean metamodellingFlag;
+    
+    protected Map<Integer,Map<String, List<Integer>>> nodeRelations;
 
     public Tableau(InterruptFlag interruptFlag, TableauMonitor tableauMonitor, ExistentialExpansionStrategy existentialsExpansionStrategy, boolean useDisjunctionLearning, DLOntology permanentDLOntology, DLOntology additionalDLOntology, Map<String, Object> parameters) {
         if (additionalDLOntology != null && !additionalDLOntology.getAllDescriptionGraphs().isEmpty()) {
@@ -122,37 +124,11 @@ implements Serializable {
             this.closeMetaRuleDisjunctionsMap = new HashMap<String, List<Map.Entry<Node, Node>>> ();
             this.metamodellingFlag = true;
             
+            
+            
             this.differentIndividualsMap = new HashMap<Integer,List<Integer>>();
-            for (int j=0; j<this.m_extensionManager.m_ternaryExtensionTable.m_tupleTable.m_pages.length; j++) {
-            	if (this.m_extensionManager.m_ternaryExtensionTable.m_tupleTable.m_pages[j] != null) {
-            		for (int i=0; i < this.m_extensionManager.m_ternaryExtensionTable.m_tupleTable.m_pages[j].m_objects.length-2 ;i++) {
-                		Object object = this.m_extensionManager.m_ternaryExtensionTable.m_tupleTable.m_pages[j].m_objects[i];
-                		if (object != null && object.toString().equals("!=")) {
-                			Node obj1 = (Node) this.m_extensionManager.m_ternaryExtensionTable.m_tupleTable.m_pages[j].m_objects[i+1];
-                			Node obj2 = (Node) this.m_extensionManager.m_ternaryExtensionTable.m_tupleTable.m_pages[j].m_objects[i+2];
-                			this.differentIndividualsMap.putIfAbsent(obj1.m_nodeID, new ArrayList<Integer>());
-                			this.differentIndividualsMap.get(obj1.m_nodeID).add(obj2.m_nodeID);
-                		}
-                    }
-            	}
-            }
-            
             this.nodeProperties = new HashMap<Integer,Map<Integer, List<String>>>();
-            for (int j=0; j<this.m_extensionManager.m_ternaryExtensionTable.m_tupleTable.m_pages.length; j++) {
-            	if (this.m_extensionManager.m_ternaryExtensionTable.m_tupleTable.m_pages[j] != null) {
-            		for (int i=0; i < this.m_extensionManager.m_ternaryExtensionTable.m_tupleTable.m_pages[j].m_objects.length-2 ;i++) {
-            			Object property = this.m_extensionManager.m_ternaryExtensionTable.m_tupleTable.m_pages[j].m_objects[i];
-    	    			if (property instanceof AtomicRole && (i + 2) <= this.m_extensionManager.m_ternaryExtensionTable.m_tupleTable.m_pages[j].m_objects.length) {
-    	    				Node node1 = (Node) this.m_extensionManager.m_ternaryExtensionTable.m_tupleTable.m_pages[j].m_objects[i+1];
-    	    				Node node2 = (Node) this.m_extensionManager.m_ternaryExtensionTable.m_tupleTable.m_pages[j].m_objects[i+2];
-    	    				this.nodeProperties.putIfAbsent(node1.m_nodeID, new HashMap<Integer, List<String>>());
-    	    				this.nodeProperties.get(node1.m_nodeID).putIfAbsent(node2.m_nodeID, new ArrayList<String>());
-    	    				this.nodeProperties.get(node1.m_nodeID).get(node2.m_nodeID).add(property.toString());
-    	    			}
-                    }
-            	}
-            }
-            
+            this.nodeRelations = new HashMap<Integer,Map<String, List<Integer>>>();
             
             BranchedHyperresolutionManager branchedHypM = new BranchedHyperresolutionManager();
             branchedHypM.setHyperresolutionManager(this.m_permanentHyperresolutionManager);
