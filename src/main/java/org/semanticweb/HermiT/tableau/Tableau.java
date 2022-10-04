@@ -631,35 +631,30 @@ implements Serializable {
     }
     
     protected List<Node> getRelatedNodes(Node node, String property) {
-    	Set<Node> relatedNodes = new HashSet<Node>();
-    	if (this.nodeProperties.containsKey(node.m_nodeID)) {
-    		for (Integer node2 : this.nodeProperties.get(node.m_nodeID).keySet()) {
-    			for (String propertyIter : this.nodeProperties.get(node.m_nodeID).get(node2)) {
-    				if (propertyIter.equals(property)) {
-    					for (Node metamodellingNode : this.metamodellingNodes) {
-    						if (metamodellingNode.m_nodeID == node2 || metamodellingNode.getCanonicalNode().m_nodeID == node2) {
-    							relatedNodes.add(metamodellingNode);
-    						}
-    					}
-    				}
-    			}
-    		}
-    	}
-    	if (this.nodeProperties.containsKey(node.getCanonicalNode().m_nodeID)) {
-    		for (Integer node2 : this.nodeProperties.get(node.getCanonicalNode().m_nodeID).keySet()) {
-    			for (String propertyIter : this.nodeProperties.get(node.getCanonicalNode().m_nodeID).get(node2)) {
-    				if (propertyIter.equals(property)) {
-    					for (Node metamodellingNode : this.metamodellingNodes) {
-    						if (metamodellingNode.m_nodeID == node2 || metamodellingNode.getCanonicalNode().m_nodeID == node2) {
-    							relatedNodes.add(metamodellingNode);
-    						}
-    					}
-    				}
-    			}
-    		}
-    	}
-    	
-    	return new ArrayList<Node>(relatedNodes);
+		Set<Node> relatedNodes = new HashSet<Node>();
+		if (this.nodeRelations.containsKey(node.m_nodeID)) {
+			if (this.nodeRelations.get(node.m_nodeID).containsKey(property)) {
+				for(Integer nodeTo : this.nodeRelations.get(node.m_nodeID).get(property)) {
+					for (Node metamodellingNode : this.metamodellingNodes) {
+						if (metamodellingNode.m_nodeID == nodeTo || metamodellingNode.getCanonicalNode().m_nodeID == nodeTo) {
+							relatedNodes.add(metamodellingNode);
+						}
+					}
+				}
+			}
+		}
+		if (this.nodeRelations.containsKey(node.getCanonicalNode().m_nodeID)) {
+			if (this.nodeRelations.get(node.getCanonicalNode().m_nodeID).containsKey(property)) {
+				for(Integer nodeTo : this.nodeRelations.get(node.getCanonicalNode().m_nodeID).get(property)) {
+					for (Node metamodellingNode : this.metamodellingNodes) {
+						if (metamodellingNode.m_nodeID == nodeTo || metamodellingNode.getCanonicalNode().m_nodeID == nodeTo) {
+							relatedNodes.add(metamodellingNode);
+						}
+					}
+				}
+			}
+		}
+		return new ArrayList<Node>(relatedNodes);
     }
 
 	public boolean startBacktracking(GroundDisjunction groundDisjunction) {
