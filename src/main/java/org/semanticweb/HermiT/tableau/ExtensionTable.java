@@ -98,6 +98,13 @@ implements Serializable {
             	this.m_tableau.nodeProperties.putIfAbsent(node0.m_nodeID, new HashMap<Integer, List<String>>());
 				this.m_tableau.nodeProperties.get(node0.m_nodeID).putIfAbsent(node1.m_nodeID, new ArrayList<String>());
 				this.m_tableau.nodeProperties.get(node0.m_nodeID).get(node1.m_nodeID).add(tuple[0].toString());
+            
+				this.m_tableau.nodeRelations.putIfAbsent(node0.m_nodeID, new HashMap<String, List<Integer>>());
+				this.m_tableau.nodeRelations.get(node0.m_nodeID).putIfAbsent(tuple[0].toString(), new ArrayList<Integer>());
+				List<Integer> nodesTo = this.m_tableau.nodeRelations.get(node0.m_nodeID).get(tuple[0].toString());
+				if (!nodesTo.contains(node1.m_nodeID)) {
+					nodesTo.add(node1.m_nodeID);
+				}
             }
         }
     }
