@@ -1228,17 +1228,49 @@ public class MetamodellingTests extends TestCase {
 //		flags.remove(flagsCount);
 //		TestCase.assertEquals(true, result);
 //	}
+//	
+//	public void testPrototipo7() {
+//		CommandLine cl = new CommandLine();
+//		flags.add(testCasesPath+"Prototipo/ont7.owl");
+//		cl.main(flags.toArray(new String[flagsCount+1]));
+//		System.out.println("Prototipo7 es consistente");
+//		
+//		flags.remove(flagsCount);
+//		TestCase.assertEquals(true, true);
+//	}
+//	
+//	//FIN - Prototipo
+		
+	//COMIENZO - Nuevos
 	
-	public void testPrototipo7() {
+	public void testAccountingConsistente2_corta() {
 		CommandLine cl = new CommandLine();
-		flags.add(testCasesPath+"Prototipo/ont7.owl");
+		flags.add(testCasesPath+"Nuevos/AccountingConsistente2-corta.owl");
 		cl.main(flags.toArray(new String[flagsCount+1]));
-		System.out.println("Prototipo7 es consistente");
+		System.out.println("AccountingConsistente2-corta es consistente");
 		
 		flags.remove(flagsCount);
 		TestCase.assertEquals(true, true);
 	}
 	
-	//FIN - Prototipo
+	public void testPruebaCloseMetaRuleNotR() {
+		CommandLine cl = new CommandLine();
+		flags.add(testCasesPath+"Nuevos/pruebaCloseMetaRuleNotR.owl");
+		cl.main(flags.toArray(new String[flagsCount+1]));
+		System.out.println("pruebaCloseMetaRuleNotR es consistente");
+		
+		flags.remove(flagsCount);
+		TestCase.assertEquals(true, true);
+	}
+	
+	public void testPruebaInfEquivConceptsMeta() {
+		CommandLine cl = new CommandLine();
+		flags.add(testCasesPath+"Nuevos/pruebaInfEquivConceptsMeta.owl");
+		cl.main(flags.toArray(new String[flagsCount+1]));
+		System.out.println("pruebaInfEquivConceptsMeta es consistente");
+		
+		flags.remove(flagsCount);
+		TestCase.assertEquals(true, true);
+	}
 	
 }

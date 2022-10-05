@@ -151,9 +151,52 @@ public final class MetamodellingManager {
     		}
     	}
     	return false;
-    }
+//		for (Node node0 : this.m_tableau.metamodellingNodes) {
+//    		for (Node node1 : this.m_tableau.metamodellingNodes) {
+//    			Node node0Eq = node0.getCanonicalNode();
+//    			Node node1Eq = node1.getCanonicalNode();    			
+//        		for (OWLMetaRuleAxiom mrAxiom : this.m_tableau.m_permanentDLOntology.getMetaRuleAxioms()) {
+//        			String propertyRString = mrAxiom.getClass().toString();
+//        			// R(node0Eq,b1), ... , R(node0Eq,bn) -> list = [b1, ... ,bn]
+//        			List<Integer> nodesTo = this.m_tableau.nodeRelations.get(node0Eq.m_nodeID).get(propertyRString);
+//        			if (!nodesTo.contains(node1Eq.m_nodeID)) {
+//        				if (!isCloseMetaRuleDisjunctionAdded(propertyRString, node0Eq, node1Eq)) {
+//        					// <#R> v <~#R>
+//        					GroundDisjunction groundDisjunction = createCloseMetaRuleDisjunction(propertyRString, node0Eq, node1Eq);
+//    	    				if (!groundDisjunction.isSatisfied(this.m_tableau)) {
+//        						this.m_tableau.addGroundDisjunction(groundDisjunction);
+//        							return true;
+//        					}
+//        				}	
+//        			}
+//        		}
+//    		}
+//		}
+//		return false;
+	}
 	
 	private List<String> getObjectProperties(Node node0, Node node1) {
+    	Set<String> objectProperties2 = new HashSet<String>();
+    	
+//    	if (this.m_tableau.nodeRelations.containsKey(node0.m_nodeID)) {
+//			for(Map.Entry<String,List<Integer>> entry : this.m_tableau.nodeRelations.get(node0.m_nodeID).entrySet()) {
+//				String property = entry.getKey();
+//				// aR ->  [], esa l contiene a b.
+//				if (this.m_tableau.nodeRelations.get(node0.m_nodeID).get(property).contains(node1.m_nodeID) || this.m_tableau.nodeRelations.get(node0.m_nodeID).get(property).contains(node1.getCanonicalNode().m_nodeID)) {
+//					objectProperties2.add(property);
+//    			}
+//    		}
+//    	}
+//    	if (this.m_tableau.nodeRelations.containsKey(node0.getCanonicalNode().m_nodeID)) {
+//    		for(Map.Entry<String,List<Integer>> entry : this.m_tableau.nodeRelations.get(node0.getCanonicalNode().m_nodeID).entrySet()) {
+//				String property = entry.getKey();
+//				// aR -> l = [], esa l contiene a b.
+//				if (this.m_tableau.nodeRelations.get(node0.getCanonicalNode().m_nodeID).get(property).contains(node1.m_nodeID) || this.m_tableau.nodeRelations.get(node0.getCanonicalNode().m_nodeID).get(property).contains(node1.getCanonicalNode().m_nodeID)) {
+//					objectProperties2.add(property);
+//    			}
+//    		}
+//    	}
+    	
     	Set<String> objectProperties = new HashSet<String>();
     	if (this.m_tableau.nodeProperties.containsKey(node0.getCanonicalNode().m_nodeID)) {
     		if (this.m_tableau.nodeProperties.get(node0.getCanonicalNode().m_nodeID).containsKey(node1.getCanonicalNode().m_nodeID)) {
@@ -175,6 +218,15 @@ public final class MetamodellingManager {
     			objectProperties.addAll(this.m_tableau.nodeProperties.get(node0.m_nodeID).get(node1.m_nodeID));
     		}
     	}
+    	
+//    	if (!objectProperties.equals(objectProperties2)) {
+//    		java.util.logging.Logger logger =  java.util.logging.Logger.getLogger(this.getClass().getName());
+//    		logger.info("Error, dan diferentes.");
+//    		System.out.print(objectProperties);
+//    		System.out.println();
+//    		System.out.print(objectProperties2);
+//    	}
+    	
     	return new ArrayList<String>(objectProperties);
     }
 	
