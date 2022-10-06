@@ -224,32 +224,39 @@ implements Serializable {
                     this.m_tableau.differentIndividualsMap.get(node0toDelete.m_nodeID).remove(j);
                 }
             } else {
-            	Node node0 = (Node) tuple[1];
-            	Node node1 = (Node) tuple[2];
-        		String propertyToDelete = null;
-            	for (Integer node0iter : this.m_tableau.nodeProperties.keySet()) {
-            		if (node0iter == node0.m_nodeID) {
-            			for (Integer node1iter : this.m_tableau.nodeProperties.get(node0.m_nodeID).keySet()) {
-            				if (node1iter == node1.m_nodeID) {
-            					for (String property :  this.m_tableau.nodeProperties.get(node0.m_nodeID).get(node1.m_nodeID)) {
-            						if (property.toString().equals(tuple[0].toString())) {
-            							node0toDelete = node0;
-                    					node1toDelete = node1;
-                    					propertyToDelete = property;
-                    					flag = true;
-                    					break;
-            						}
-            					}
-            				}
-            			}
-            		}
-            		if (flag) {
-            			break;
-            		}
-            	}
-            	if (node0toDelete != null && node1toDelete != null) {
-                    this.m_tableau.nodeProperties.get(node0toDelete.m_nodeID).get(node1toDelete.m_nodeID).remove(propertyToDelete);
-                }
+            	Node node0 = (Node)tuple[1];
+            	Node node1 = (Node)tuple[2];
+        		String property = tuple[0].toString();
+//    			if (this.m_tableau.nodeRelations.containsKey(node0.m_nodeID) && this.m_tableau.nodeRelations.get(node0.m_nodeID).containsKey(property)) {
+//    				if (this.m_tableau.nodeRelations.get(node0.m_nodeID).get(property).contains(node1.m_nodeID)) {
+//    					this.m_tableau.nodeRelations.get(node0.m_nodeID).get(property).remove(Integer.valueOf(node1.m_nodeID));
+//    				}
+//        		}
+				this.m_tableau.nodeRelations.get(node0.m_nodeID).get(property).remove(Integer.valueOf(node1.m_nodeID));
+
+//            	for (Integer node0iter : this.m_tableau.nodeProperties.keySet()) {
+//            		if (node0iter == node0.m_nodeID) {
+//            			for (Integer node1iter : this.m_tableau.nodeProperties.get(node0.m_nodeID).keySet()) {
+//            				if (node1iter == node1.m_nodeID) {
+//            					for (String property :  this.m_tableau.nodeProperties.get(node0.m_nodeID).get(node1.m_nodeID)) {
+//            						if (property.toString().equals(tuple[0].toString())) {
+//            							node0toDelete = node0;
+//                    					node1toDelete = node1;
+//                    					propertyToDelete = property;
+//                    					flag = true;
+//                    					break;
+//            						}
+//            					}
+//            				}
+//            			}
+//            		}
+//            		if (flag) {
+//            			break;
+//            		}
+//            	}
+//            	if (node0toDelete != null && node1toDelete != null) {
+//                    this.m_tableau.nodeProperties.get(node0toDelete.m_nodeID).get(node1toDelete.m_nodeID).remove(propertyToDelete);
+//                }
             }
         } else if (tuple.length == 2) {
         	this.m_tableau.m_metamodellingManager.defAssertions.remove(tuple[0].toString());

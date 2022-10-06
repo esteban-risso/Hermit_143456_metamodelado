@@ -338,26 +338,31 @@ public class MetamodellingAxiomHelper {
 			Atom[] headAtoms1 = {def1Atom, def2Atom};
 			Atom[] bodyAtoms1 = {def0Atom};
 			
+			// <internal:def#2>(X) v <internal:def#3>(X) :- <internal:def#1>(X)
 			DLClause dlClause1 = DLClause.create(headAtoms1, bodyAtoms1);
 			
 			Atom[] headAtoms2 = {classAAtom};
 			Atom[] bodyAtoms2 = {def1Atom};
 			
+			// <TE10#A1>(X) :- <internal:def#2>(X)
 			DLClause dlClause2 = DLClause.create(headAtoms2, bodyAtoms2);
 			
 			Atom[] headAtoms3 = {classBAtom};
 			Atom[] bodyAtoms3 = {def2Atom};
 		
+			// <TE10#A2>(X) :- <internal:def#3>(X)
 			DLClause dlClause3 = DLClause.create(headAtoms3, bodyAtoms3);
 			
 			Atom[] headAtoms4 = {};
 			Atom[] bodyAtoms4 = {classAAtom, def2Atom};
 			
+			// :- <TE10#A1>(X), <internal:def#3>(X)
 			DLClause dlClause4 = DLClause.create(headAtoms4, bodyAtoms4);
 			
 			Atom[] headAtoms5 = {};
 			Atom[] bodyAtoms5 = {classBAtom, def1Atom};
 			
+			// :- <TE10#A2>(X), <internal:def#2>(X)
 			DLClause dlClause5 = DLClause.create(headAtoms5, bodyAtoms5);
 			
 			ontology.getDLClauses().add(dlClause1);
