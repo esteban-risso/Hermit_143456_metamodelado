@@ -135,7 +135,7 @@ public final class MetamodellingManager {
     			Node node0Eq = node0.getCanonicalNode();
     			Node node1Eq = node1.getCanonicalNode();    			
         		for (OWLMetaRuleAxiom mrAxiom : this.m_tableau.m_permanentDLOntology.getMetaRuleAxioms()) {
-        			String propertyRString = mrAxiom.getClass().toString();
+        			String propertyRString = mrAxiom.getPropertyR().toString();
         			
         			if (this.m_tableau.nodeRelations.containsKey(node0Eq.m_nodeID) && this.m_tableau.nodeRelations.get(node0Eq.m_nodeID).containsKey(propertyRString)) {
     					List<Integer> nodesTo = this.m_tableau.nodeRelations.get(node0Eq.m_nodeID).get(propertyRString);

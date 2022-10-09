@@ -86,7 +86,7 @@ implements Serializable {
     protected Map<Integer,Map<String, List<Integer>>> nodeRelations;
     protected Map<Integer,String> classOfMetamodellingAxiom;
     protected Map<String,Integer> metaIndividualToNodeID;
-    protected Map<String,Map<Integer, List<Integer>>> m_markRelations;
+    protected Map<Integer,Map<String, List<Integer>>> m_unrelatedNodes;
 
 
 
@@ -136,7 +136,7 @@ implements Serializable {
             this.nodeRelations = new HashMap<Integer,Map<String, List<Integer>>>();
             this.classOfMetamodellingAxiom = new HashMap<Integer, String>();
             this.metaIndividualToNodeID = new HashMap<String, Integer>();
-            this.m_markRelations = new HashMap<String,Map<Integer, List<Integer>>>();
+            this.m_unrelatedNodes = new HashMap<Integer,Map<String, List<Integer>>>();
             
             BranchedHyperresolutionManager branchedHypM = new BranchedHyperresolutionManager();
             branchedHypM.setHyperresolutionManager(this.m_permanentHyperresolutionManager);
@@ -550,9 +550,9 @@ implements Serializable {
                     	}
                     	this.metamodellingFlag = false;
                     }
-                    if(this.m_metamodellingManager.checkPropertyNegation()) {
-                    	return true;
-                    }
+//                    if(this.m_metamodellingManager.checkPropertyNegation()) {
+//                    	return true;
+//                    }
                     if (MetamodellingAxiomHelper.findCyclesInM(this)) {
                     	DependencySet clashDependencySet = this.m_dependencySetFactory.getActualDependencySet();
                     	this.m_extensionManager.setClash(clashDependencySet);
