@@ -90,20 +90,30 @@ implements Serializable {
             	this.m_tableau.differentIndividualsMap.putIfAbsent(node0.m_nodeID, new ArrayList<Integer>());
             	this.m_tableau.differentIndividualsMap.get(node0.m_nodeID).add(node1.m_nodeID);
             } else {
-            	// ACA VOY A PONER nodeRelations.putIfAbsent(aR, new HashMap<String,String>());
-            	// y de ser posible tambien
-            	// aRnode2 : si node2 no es metamodelling nodeRelations.get(node1+relation).putIfAbsent(node2, null);
-        		// aRnode2 : si node2 es metamodelling, node2 = m NODE2 nodeRelations.get(node1+relation).putIfAbsent(node2, classImg);
-            	// ACA ES DONDE AGREGA R(a,b) o ~R(a,b)
             	this.m_tableau.nodeProperties.putIfAbsent(node0.m_nodeID, new HashMap<Integer, List<String>>());
 				this.m_tableau.nodeProperties.get(node0.m_nodeID).putIfAbsent(node1.m_nodeID, new ArrayList<String>());
 				this.m_tableau.nodeProperties.get(node0.m_nodeID).get(node1.m_nodeID).add(tuple[0].toString());
             
-				this.m_tableau.nodeRelations.putIfAbsent(node0.m_nodeID, new HashMap<String, List<Integer>>());
-				this.m_tableau.nodeRelations.get(node0.m_nodeID).putIfAbsent(tuple[0].toString(), new ArrayList<Integer>());
-				List<Integer> nodesTo = this.m_tableau.nodeRelations.get(node0.m_nodeID).get(tuple[0].toString());
-				if (!nodesTo.contains(node1.m_nodeID)) {
-					nodesTo.add(node1.m_nodeID);
+				
+				// ~R(a,b)
+				if (tuple[0].toString().contains("~")) {
+					java.util.logging.Logger logger =  java.util.logging.Logger.getLogger(this.getClass().getName());
+	        		logger.info("Rol de marca");
+	        		System.out.println();
+	        		System.out.print(tuple[0].toString());
+	        		System.out.println();
+					this.m_tableau.m_markRelations.putIfAbsent(tuple[0].toString(), new HashMap<Integer, List<Integer>>());
+					this.m_tableau.m_markRelations.get(tuple[0].toString()).putIfAbsent(node0.m_nodeID, new ArrayList<Integer>());
+					this.m_tableau.m_markRelations.get(tuple[0].toString()).get(node0.m_nodeID).add(node1.m_nodeID);
+				}
+				// R(a,b)
+				else {
+					this.m_tableau.nodeRelations.putIfAbsent(node0.m_nodeID, new HashMap<String, List<Integer>>());
+					this.m_tableau.nodeRelations.get(node0.m_nodeID).putIfAbsent(tuple[0].toString(), new ArrayList<Integer>());
+					List<Integer> nodesTo = this.m_tableau.nodeRelations.get(node0.m_nodeID).get(tuple[0].toString());
+					if (!nodesTo.contains(node1.m_nodeID)) {
+						nodesTo.add(node1.m_nodeID);
+					}
 				}
             }
         }

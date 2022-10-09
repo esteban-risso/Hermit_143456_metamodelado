@@ -111,7 +111,14 @@ implements Serializable {
                         }
                         this.m_ternaryExtensionTableSearch01Bound.next();
                     }
-                }
+                }                
+            }
+            if (dlPredicateObject.toString().contains("<~")) { 
+//        		java.util.logging.Logger logger =  java.util.logging.Logger.getLogger(this.getClass().getName());
+//        		logger.info("Rol de marca");
+        		System.out.println();
+        		System.out.print(dlPredicateObject);
+        		System.out.println();
             }
         }
     }

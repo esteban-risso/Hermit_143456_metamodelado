@@ -136,20 +136,21 @@ public final class MetamodellingManager {
     			Node node1Eq = node1.getCanonicalNode();    			
         		for (OWLMetaRuleAxiom mrAxiom : this.m_tableau.m_permanentDLOntology.getMetaRuleAxioms()) {
         			String propertyRString = mrAxiom.getClass().toString();
-        			// R(node0Eq,b1), ... , R(node0Eq,bn) -> list = [b1, ... ,bn]
+        			
         			if (this.m_tableau.nodeRelations.containsKey(node0Eq.m_nodeID) && this.m_tableau.nodeRelations.get(node0Eq.m_nodeID).containsKey(propertyRString)) {
     					List<Integer> nodesTo = this.m_tableau.nodeRelations.get(node0Eq.m_nodeID).get(propertyRString);
-            			if (!nodesTo.contains(node1Eq.m_nodeID)) {
-            				if (!isCloseMetaRuleDisjunctionAdded(propertyRString, node0Eq, node1Eq)) {
-            					// <#R> v <~#R>
-            					GroundDisjunction groundDisjunction = createCloseMetaRuleDisjunction(propertyRString, node0Eq, node1Eq);
-        	    				if (!groundDisjunction.isSatisfied(this.m_tableau)) {
-            						this.m_tableau.addGroundDisjunction(groundDisjunction);
-            							return true;
-            					}
-            				}	
-            			}
-        			}
+    					if (nodesTo.contains(node1Eq.m_nodeID)) break;			
+    				}
+        			
+        			if (!isCloseMetaRuleDisjunctionAdded(propertyRString, node0Eq, node1Eq)) {
+    					// <#R> v <~#R>
+    					GroundDisjunction groundDisjunction = createCloseMetaRuleDisjunction(propertyRString, node0Eq, node1Eq);
+	    				if (!groundDisjunction.isSatisfied(this.m_tableau)) {
+    						this.m_tableau.addGroundDisjunction(groundDisjunction);
+    						return true;
+    					}
+    				}
+        				
         		}
     		}
 		}
