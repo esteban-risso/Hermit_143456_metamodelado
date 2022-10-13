@@ -31,6 +31,18 @@ public final class MetamodellingManager {
 		defAssertions = new ArrayList<String>();
 	}
 	
+	protected boolean checkEqualMetamodellingRule() {
+		boolean ruleApplied = false;
+		for (Node node1 : this.m_tableau.metamodellingNodes) {
+			for (Node node2 : this.m_tableau.metamodellingNodes) {
+				if (this.m_tableau.areSameIndividual(node1, node2)) {
+					if (checkEqualMetamodellingRuleIteration(node1, node2)) ruleApplied = true;
+				}
+			}
+		}
+		return ruleApplied;
+	}
+		
 	public boolean checkEqualMetamodellingRuleIteration(Node node0, Node node1) {
 		// node0 = m A1, node0 = m A2, ... , node0 = m An -> [A1,A2, ... ,An]
 		List<OWLClassExpression> node0Classes = MetamodellingAxiomHelper.getMetamodellingClassesByIndividual(this.m_tableau.getNodeToMetaIndividual().get(node0.getNodeID()), this.m_tableau.getPermanentDLOntology());
@@ -49,6 +61,18 @@ public final class MetamodellingManager {
 			}
 		}
 		return false;
+	}
+	
+	protected boolean checkInequalityMetamodellingRule() {
+		boolean ruleApplied = false;
+		for (Node node1 : this.m_tableau.metamodellingNodes) {
+			for (Node node2 : this.m_tableau.metamodellingNodes) {
+				if (this.m_tableau.areDifferentIndividual(node1, node2)) {
+					if (checkInequalityMetamodellingRuleIteration(node1, node2)) ruleApplied = true;
+				}
+			}
+		}
+		return ruleApplied;
 	}
 	
 	public boolean checkInequalityMetamodellingRuleIteration(Node node0, Node node1) {
@@ -71,6 +95,15 @@ public final class MetamodellingManager {
 						}
 					}
 				}
+			}
+		}
+		return false;
+	}
+	
+	protected boolean checkCloseMetamodellingRule() {
+		for (Node node1 : this.m_tableau.metamodellingNodes) {
+			for (Node node2 : this.m_tableau.metamodellingNodes) {
+				if (this.m_tableau.m_metamodellingManager.checkCloseMetamodellingRuleIteration(node1, node2)) return true;
 			}
 		}
 		return false;
@@ -115,89 +148,21 @@ public final class MetamodellingManager {
     			Node node0Eq = node0.getCanonicalNode();
     			Node node1Eq = node1.getCanonicalNode();    			
         		for (OWLMetaRuleAxiom mrAxiom : this.m_tableau.m_permanentDLOntology.getMetaRuleAxioms()) {
-        			String propertyRString = mrAxiom.getPropertyR().toString();
-        			
-        			if (!this.m_tableau.nodeRelations.containsKey(node0Eq.m_nodeID) || 
-        					(this.m_tableau.nodeRelations.containsKey(node0Eq.m_nodeID) && 
-        							this.m_tableau.nodeRelations.get(node0Eq.m_nodeID).containsKey(propertyRString) &&
-     									!this.m_tableau.nodeRelations.get(node0Eq.m_nodeID).get(propertyRString).contains(node1Eq.m_nodeID))) {
-        				
-					        				if (!isCloseMetaRuleDisjunctionAdded(propertyRString, node0Eq, node1Eq)) {
-					        					// <#R> v <~#R>
-					        					GroundDisjunction groundDisjunction = createCloseMetaRuleDisjunction(propertyRString, node0Eq, node1Eq);
-					    	    				if (!groundDisjunction.isSatisfied(this.m_tableau)) {
-					        						this.m_tableau.addGroundDisjunction(groundDisjunction);
-					        						return true;
-					        					}
-					        				}	
+        			String propertyRString = mrAxiom.getPropertyR().toString();		
+        			if (!this.m_tableau.nodeRelations.containsKey(node0Eq.m_nodeID) || (this.m_tableau.nodeRelations.containsKey(node0Eq.m_nodeID) && this.m_tableau.nodeRelations.get(node0Eq.m_nodeID).containsKey(propertyRString) && !this.m_tableau.nodeRelations.get(node0Eq.m_nodeID).get(propertyRString).contains(node1Eq.m_nodeID))) {
+        				if (!isCloseMetaRuleDisjunctionAdded(propertyRString, node0Eq, node1Eq)) {
+        					// <#R> v <~#R>
+        					GroundDisjunction groundDisjunction = createCloseMetaRuleDisjunction(propertyRString, node0Eq, node1Eq);
+    	    				if (!groundDisjunction.isSatisfied(this.m_tableau)) {
+        						this.m_tableau.addGroundDisjunction(groundDisjunction);
+        						return true;
+        					}
+        				}	
         			}			
         		}
     		}
 		}
 		return false;
-	}
-	
-	protected boolean checkPropertyNegationNew() {
-    	boolean findClash = false;
-    	if (this.m_tableau.m_unrelatedNodes.isEmpty()) {
-    		return findClash;
-    	}
-    	else {
-    		for (Node node0 : this.m_tableau.metamodellingNodes) {
-        		for (Node node1 : this.m_tableau.metamodellingNodes) {
-        			// R1(), R2(), ... , Rn() -> 
-        			List<String> propertiesRForEqNodes = getRelationsOfNodes(node0, node1);
-        			for (String propertyR : propertiesRForEqNodes) {
-        				if (areUnrelatedNodes(node0,node1,"<~"+propertyR.substring(1))) {
-    						DependencySet clashDependencySet = this.m_tableau.m_dependencySetFactory.getActualDependencySet();
-    						this.m_tableau.m_extensionManager.setClash(clashDependencySet);
-    						findClash = true;
-    						break;
-        				}
-        			}
-        		}
-        	}
-        	return findClash;
-    	}
-	}
-	
-	private boolean areUnrelatedNodes(Node node0, Node node1, String property) {
-		if (this.m_tableau.m_unrelatedNodes.containsKey(node0.m_nodeID) && this.m_tableau.m_unrelatedNodes.get(node0.m_nodeID).containsKey(property)) {
-			// a~R -> l, esa l contiene a b o b_canonico.
-			if (this.m_tableau.m_unrelatedNodes.get(node0.m_nodeID).get(property).contains(node1.m_nodeID) || this.m_tableau.m_unrelatedNodes.get(node0.m_nodeID).get(property).contains(node1.getCanonicalNode().m_nodeID)) {
-				return true;
-			}
-    	}
-    	if (this.m_tableau.m_unrelatedNodes.containsKey(node0.getCanonicalNode().m_nodeID) && this.m_tableau.m_unrelatedNodes.get(node0.getCanonicalNode().m_nodeID).containsKey(property)) {
-			// aR -> l, esa l contiene a b o b_canonico.
-			if (this.m_tableau.m_unrelatedNodes.get(node0.getCanonicalNode().m_nodeID).get(property).contains(node1.m_nodeID) || this.m_tableau.m_unrelatedNodes.get(node0.getCanonicalNode().m_nodeID).get(property).contains(node1.getCanonicalNode().m_nodeID)) {
-				return true;
-			}    		
-    	}
-		return false;
-	}
-	
-	private List<String> getRelationsOfNodes(Node node0, Node node1) {
-		Set<String> relations = new HashSet<String>();
-		if (this.m_tableau.nodeRelations.containsKey(node0.m_nodeID)) {
-			for(Map.Entry<String,List<Integer>> entry : this.m_tableau.nodeRelations.get(node0.m_nodeID).entrySet()) {
-				String property = entry.getKey();
-				// aR -> l, esa l contiene a b o b_canonico.
-				if (this.m_tableau.nodeRelations.get(node0.m_nodeID).get(property).contains(node1.m_nodeID) || this.m_tableau.nodeRelations.get(node0.m_nodeID).get(property).contains(node1.getCanonicalNode().m_nodeID)) {
-					relations.add(property);
-    			}
-    		}
-    	}
-    	if (this.m_tableau.nodeRelations.containsKey(node0.getCanonicalNode().m_nodeID)) {
-    		for(Map.Entry<String,List<Integer>> entry : this.m_tableau.nodeRelations.get(node0.getCanonicalNode().m_nodeID).entrySet()) {
-				String property = entry.getKey();
-				// aR -> l, esa l contiene a b o b_canonico.
-				if (this.m_tableau.nodeRelations.get(node0.getCanonicalNode().m_nodeID).get(property).contains(node1.m_nodeID) || this.m_tableau.nodeRelations.get(node0.getCanonicalNode().m_nodeID).get(property).contains(node1.getCanonicalNode().m_nodeID)) {
-					relations.add(property);
-    			}
-    		}
-    	}
-		return new ArrayList<String>(relations);
 	}
 	
 	// chequea si la disjuncion esta o no.
@@ -215,8 +180,8 @@ public final class MetamodellingManager {
     	this.m_tableau.closeMetaRuleDisjunctionsMap.get(propertyRString).add(new AbstractMap.SimpleEntry<>(node0, node1));
     	return false;
     }
-    
-    private GroundDisjunction createCloseMetaRuleDisjunction(String propertyRString, Node node0Eq, Node node1Eq) {
+	
+	private GroundDisjunction createCloseMetaRuleDisjunction(String propertyRString, Node node0Eq, Node node1Eq) {
     	// R
     	propertyRString = propertyRString.substring(1, propertyRString.length()-1);
 		// <~#R>
@@ -244,8 +209,8 @@ public final class MetamodellingManager {
 		GroundDisjunction groundDisjunction = new GroundDisjunction(this.m_tableau, gdh, new Node[] {node0Eq, node1Eq, node0Eq, node1Eq}, new boolean[] {true, true}, dependencySet);
 		return groundDisjunction;
     }
-    
-    protected boolean checkMetaRule() {
+	
+	protected boolean checkMetaRule() {
     	// iteration over axioms Metamodelling(<#a> <#A>)
     	for (OWLMetamodellingAxiom metamodellingAxiom : this.m_tableau.m_permanentDLOntology.getMetamodellingAxioms()) {
     		// return the metamodelling node associated with the individual <#a> / Metamodelling(<#a> <#A>)
@@ -268,8 +233,8 @@ public final class MetamodellingManager {
     	}
     	return false;
     }
-    
-    // retorna el metamodellingNode asociado al individuo pasado por parametro e.
+	
+	// retorna el metamodellingNode asociado al individuo pasado por parametro e.
     public Node getMetamodellingNodeFromIndividual(OWLIndividual individual) {
     	return this.m_tableau.mapNodeIdtoNodes.get(this.m_tableau.metaIndividualToNodeID.get(individual.toString()));
     }
@@ -282,55 +247,74 @@ public final class MetamodellingManager {
     	}
     	return classes;
     }
-    
-	// retorna la propiedad R de un axioma MetaRule(R,S)/ R y ~R no se encuntre en el conjunto
-	// de propiedades pasados por parametro. Dicha propiedad va a ser usada para crear la disyuncion (R v ~R).
-    private String meetCloseMetaRuleCondition(List<String> propertiesRForEqNodes) {
-    	for (OWLMetaRuleAxiom mrAxiom : this.m_tableau.m_permanentDLOntology.getMetaRuleAxioms()) {
-    		String metaRulePropertyR = mrAxiom.getPropertyR().toString();
-    		if (!propertiesRForEqNodes.contains(metaRulePropertyR) && !propertiesRForEqNodes.contains(getNegativeProperty(metaRulePropertyR))) {
-				return metaRulePropertyR;
+	
+	protected boolean checkPropertyNegationNew() {
+    	boolean findClash = false;
+    	if (this.m_tableau.m_unrelatedNodes.isEmpty()) {
+    		return findClash;
+    	}
+    	else {
+    		for (Node node0 : this.m_tableau.metamodellingNodes) {
+        		for (Node node1 : this.m_tableau.metamodellingNodes) {
+        			// R1(), R2(), ... , Rn() -> 
+        			List<String> propertiesRForEqNodes = getRelationsOfNodes(node0, node1);
+        			for (String propertyR : propertiesRForEqNodes) {
+        				if (areUnrelatedNodes(node0,node1,"<~"+propertyR.substring(1))) {
+    						DependencySet clashDependencySet = this.m_tableau.m_dependencySetFactory.getActualDependencySet();
+    						this.m_tableau.m_extensionManager.setClash(clashDependencySet);
+    						findClash = true;
+    						break;
+        				}
+        			}
+        		}
+        	}
+        	return findClash;
+    	}
+	}
+	
+	private List<String> getRelationsOfNodes(Node node0, Node node1) {
+		Set<String> relations = new HashSet<String>();
+		if (this.m_tableau.nodeRelations.containsKey(node0.m_nodeID)) {
+			for(Map.Entry<String,List<Integer>> entry : this.m_tableau.nodeRelations.get(node0.m_nodeID).entrySet()) {
+				String property = entry.getKey();
+				// aR -> l, esa l contiene a b o b_canonico.
+				if (this.m_tableau.nodeRelations.get(node0.m_nodeID).get(property).contains(node1.m_nodeID) || this.m_tableau.nodeRelations.get(node0.m_nodeID).get(property).contains(node1.getCanonicalNode().m_nodeID)) {
+					relations.add(property);
+    			}
+    		}
+    	}
+    	if (this.m_tableau.nodeRelations.containsKey(node0.getCanonicalNode().m_nodeID)) {
+    		for(Map.Entry<String,List<Integer>> entry : this.m_tableau.nodeRelations.get(node0.getCanonicalNode().m_nodeID).entrySet()) {
+				String property = entry.getKey();
+				// aR -> l, esa l contiene a b o b_canonico.
+				if (this.m_tableau.nodeRelations.get(node0.getCanonicalNode().m_nodeID).get(property).contains(node1.m_nodeID) || this.m_tableau.nodeRelations.get(node0.getCanonicalNode().m_nodeID).get(property).contains(node1.getCanonicalNode().m_nodeID)) {
+					relations.add(property);
+    			}
+    		}
+    	}
+		return new ArrayList<String>(relations);
+	}
+	
+	private boolean areUnrelatedNodes(Node node0, Node node1, String property) {
+		if (this.m_tableau.m_unrelatedNodes.containsKey(node0.m_nodeID) && this.m_tableau.m_unrelatedNodes.get(node0.m_nodeID).containsKey(property)) {
+			// a~R -> l, esa l contiene a b o b_canonico.
+			if (this.m_tableau.m_unrelatedNodes.get(node0.m_nodeID).get(property).contains(node1.m_nodeID) || this.m_tableau.m_unrelatedNodes.get(node0.m_nodeID).get(property).contains(node1.getCanonicalNode().m_nodeID)) {
+				return true;
 			}
     	}
-    	return "";
-    }
+    	if (this.m_tableau.m_unrelatedNodes.containsKey(node0.getCanonicalNode().m_nodeID) && this.m_tableau.m_unrelatedNodes.get(node0.getCanonicalNode().m_nodeID).containsKey(property)) {
+			// aR -> l, esa l contiene a b o b_canonico.
+			if (this.m_tableau.m_unrelatedNodes.get(node0.getCanonicalNode().m_nodeID).get(property).contains(node1.m_nodeID) || this.m_tableau.m_unrelatedNodes.get(node0.getCanonicalNode().m_nodeID).get(property).contains(node1.getCanonicalNode().m_nodeID)) {
+				return true;
+			}    		
+    	}
+		return false;
+	}
     
     private String getNegativeProperty(String property) {
     	String prefix = "<~";
     	String negativeProperty = prefix + property.substring(1);
     	return negativeProperty;
     }
-
-protected boolean checkEqualMetamodellingRule() {
-	boolean ruleApplied = false;
-	for (Node node1 : this.m_tableau.metamodellingNodes) {
-		for (Node node2 : this.m_tableau.metamodellingNodes) {
-			if (this.m_tableau.areSameIndividual(node1, node2)) {
-				if (checkEqualMetamodellingRuleIteration(node1, node2)) ruleApplied = true;
-			}
-		}
-	}
-	return ruleApplied;
-}
-
-protected boolean checkInequalityMetamodellingRule() {
-	boolean ruleApplied = false;
-	for (Node node1 : this.m_tableau.metamodellingNodes) {
-		for (Node node2 : this.m_tableau.metamodellingNodes) {
-			if (this.m_tableau.areDifferentIndividual(node1, node2)) {
-				if (checkInequalityMetamodellingRuleIteration(node1, node2)) ruleApplied = true;
-			}
-		}
-	}
-	return ruleApplied;
-}
-
-protected boolean checkCloseMetamodellingRule() {
-	for (Node node1 : this.m_tableau.metamodellingNodes) {
-		for (Node node2 : this.m_tableau.metamodellingNodes) {
-			if (this.m_tableau.m_metamodellingManager.checkCloseMetamodellingRuleIteration(node1, node2)) return true;
-		}
-	}
-	return false;
-}
+  
 }
