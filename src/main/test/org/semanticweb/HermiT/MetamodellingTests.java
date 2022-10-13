@@ -1272,5 +1272,17 @@ public class MetamodellingTests extends TestCase {
 		flags.remove(flagsCount);
 		TestCase.assertEquals(true, true);
 	}
+//	
+//	public void test() {
+//		CommandLine cl = new CommandLine();
+//		flags.add(testCasesPath+"Nuevos/Test.owl");
+//		
+//		cl.main(flags.toArray(new String[flagsCount+1]));
+//		System.out.println("Test es consistente");
+//		
+//		
+//		flags.remove(flagsCount);
+//		TestCase.assertEquals(true, true);
+//	}
 	
 }

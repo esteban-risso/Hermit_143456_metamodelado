@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.semanticweb.HermiT.model.AtomicConcept;
 import org.semanticweb.HermiT.model.AtomicNegationConcept;
 import org.semanticweb.HermiT.model.AtomicRole;
@@ -80,7 +82,6 @@ implements Serializable {
         } else if (dlPredicateObject instanceof DescriptionGraph) {
             this.m_tableau.m_descriptionGraphManager.descriptionGraphTupleAdded(tupleIndex, tuple);
         }
-        this.m_tableau.m_clashManager.tupleAdded(this, tuple, dependencySet);
         // tuple con R(a,b) o !=(a,b) o ~R(a,b)
         if (tuple.length>2 && tuple[1] instanceof Node && tuple[2] instanceof Node) {
         	Node node0 = (Node) tuple[1];
@@ -90,18 +91,8 @@ implements Serializable {
             	this.m_tableau.differentIndividualsMap.putIfAbsent(node0.m_nodeID, new ArrayList<Integer>());
             	this.m_tableau.differentIndividualsMap.get(node0.m_nodeID).add(node1.m_nodeID);
             } else {
-            	this.m_tableau.nodeProperties.putIfAbsent(node0.m_nodeID, new HashMap<Integer, List<String>>());
-				this.m_tableau.nodeProperties.get(node0.m_nodeID).putIfAbsent(node1.m_nodeID, new ArrayList<String>());
-				this.m_tableau.nodeProperties.get(node0.m_nodeID).get(node1.m_nodeID).add(tuple[0].toString());
-            
-				
 				// ~R(a,b)
 				if (tuple[0].toString().contains("~")) {
-					java.util.logging.Logger logger =  java.util.logging.Logger.getLogger(this.getClass().getName());
-	        		logger.info("Rol de marca");
-	        		System.out.println();
-	        		System.out.print(tuple[0].toString());
-	        		System.out.println();
 					this.m_tableau.m_unrelatedNodes.putIfAbsent(node0.m_nodeID, new HashMap<String, List<Integer>>());
 					this.m_tableau.m_unrelatedNodes.get(node0.m_nodeID).putIfAbsent(tuple[0].toString(), new ArrayList<Integer>());
 					this.m_tableau.m_unrelatedNodes.get(node0.m_nodeID).get(tuple[0].toString()).add(node1.m_nodeID);
@@ -117,8 +108,9 @@ implements Serializable {
 				}
             }
         }
+        this.m_tableau.m_clashManager.tupleAdded(this, tuple, dependencySet);
     }
-
+    
     public abstract boolean containsTuple(Object[] var1);
 
     public Retrieval createRetrieval(boolean[] bindingPattern, View extensionView) {

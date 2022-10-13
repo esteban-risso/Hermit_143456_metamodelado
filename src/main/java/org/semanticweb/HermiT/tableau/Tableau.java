@@ -80,7 +80,6 @@ implements Serializable {
     protected Map<Integer, List<Integer>> createdDisjunction;
     protected Map<String, List<Map.Entry<Node, Node>>> closeMetaRuleDisjunctionsMap;
     protected Map<Integer,List<Integer>> differentIndividualsMap;
-    protected Map<Integer,Map<Integer, List<String>>> nodeProperties;
     protected boolean metamodellingFlag;
     
     protected Map<Integer,Map<String, List<Integer>>> nodeRelations;
@@ -128,11 +127,8 @@ implements Serializable {
             this.createdDisjunction = new HashMap<Integer, List<Integer>>();
             this.closeMetaRuleDisjunctionsMap = new HashMap<String, List<Map.Entry<Node, Node>>> ();
             this.metamodellingFlag = true;
-            
-            
-            
+
             this.differentIndividualsMap = new HashMap<Integer,List<Integer>>();
-            this.nodeProperties = new HashMap<Integer,Map<Integer, List<String>>>();
             this.nodeRelations = new HashMap<Integer,Map<String, List<Integer>>>();
             this.classOfMetamodellingAxiom = new HashMap<Integer, String>();
             this.metaIndividualToNodeID = new HashMap<String, Integer>();
@@ -550,9 +546,9 @@ implements Serializable {
                     	}
                     	this.metamodellingFlag = false;
                     }
-//                    if(this.m_metamodellingManager.checkPropertyNegation()) {
-//                    	return true;
-//                    }
+                    if(this.m_metamodellingManager.checkPropertyNegationNew()) {
+                    	return true;
+                    }
                     if (MetamodellingAxiomHelper.findCyclesInM(this)) {
                     	DependencySet clashDependencySet = this.m_dependencySetFactory.getActualDependencySet();
                     	this.m_extensionManager.setClash(clashDependencySet);
@@ -1036,6 +1032,7 @@ implements Serializable {
         this.m_lastMergedOrPrunedNode = node;
         ++this.m_numberOfMergedOrPrunedNodes;
         this.m_existentialExpansionStrategy.nodeStatusChanged(node);
+
     }
 
     protected void backtrackLastMergedOrPrunedNode() {
