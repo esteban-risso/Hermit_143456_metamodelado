@@ -243,7 +243,7 @@ public final class MetamodellingManager {
     private List<String> getNodesClasses(List<Node> nodes) {
     	List<String> classes = new ArrayList<String>();
     	for (Node node : nodes) {
-    		classes.add(this.m_tableau.classOfMetamodellingAxiom.get(node.m_nodeID));
+    		classes.addAll(this.m_tableau.classOfMetamodellingAxiom.get(node.m_nodeID));
     	}
     	return classes;
     }
