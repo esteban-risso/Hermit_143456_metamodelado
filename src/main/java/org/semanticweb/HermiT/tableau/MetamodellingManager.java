@@ -259,7 +259,7 @@ public final class MetamodellingManager {
         			// R1(), R2(), ... , Rn() -> 
         			List<String> propertiesRForEqNodes = getRelationsOfNodes(node0, node1);
         			for (String propertyR : propertiesRForEqNodes) {
-        				if (areUnrelatedNodes(node0,node1,"<~"+propertyR.substring(1))) {
+        				if (areUnrelatedNodes(node0,node1,getNegativeProperty(propertyR))) {
     						DependencySet clashDependencySet = this.m_tableau.m_dependencySetFactory.getActualDependencySet();
     						this.m_tableau.m_extensionManager.setClash(clashDependencySet);
     						findClash = true;
