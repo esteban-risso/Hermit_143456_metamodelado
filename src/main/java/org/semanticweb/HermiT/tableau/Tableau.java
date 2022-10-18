@@ -83,7 +83,7 @@ implements Serializable {
     protected boolean metamodellingFlag;
     
     protected Map<Integer,Map<String, List<Integer>>> nodeRelations;
-    protected Map<Integer,List<String>> classOfMetamodellingAxiom;
+    protected Map<Integer,Set<String>> classOfMetamodellingAxiom;
     protected Map<String,Integer> metaIndividualToNodeID;
     protected Map<Integer,Map<String, List<Integer>>> m_unrelatedNodes;
 
@@ -130,7 +130,7 @@ implements Serializable {
 
             this.differentIndividualsMap = new HashMap<Integer,List<Integer>>();
             this.nodeRelations = new HashMap<Integer,Map<String, List<Integer>>>();
-            this.classOfMetamodellingAxiom = new HashMap<Integer, List<String>>();
+            this.classOfMetamodellingAxiom = new HashMap<Integer, Set<String>>();
             this.metaIndividualToNodeID = new HashMap<String, Integer>();
             this.m_unrelatedNodes = new HashMap<Integer,Map<String, List<Integer>>>();
             
@@ -354,7 +354,7 @@ implements Serializable {
         	this.nodeToMetaIndividual.put(termsToNodes.get(ind).m_nodeID, ind);
         	this.mapNodeIdtoNodes.put(termsToNodes.get(ind).m_nodeID, termsToNodes.get(ind));
         	this.metamodellingNodes.add(termsToNodes.get(ind));
-        	this.classOfMetamodellingAxiom.putIfAbsent(termsToNodes.get(ind).m_nodeID, new ArrayList<String>());
+        	this.classOfMetamodellingAxiom.putIfAbsent(termsToNodes.get(ind).m_nodeID, new HashSet<String>());
         	this.classOfMetamodellingAxiom.get(termsToNodes.get(ind).m_nodeID).add(metamodellingAxiom.getModelClass().toString());
         }
         if (loadPermanentABox) {

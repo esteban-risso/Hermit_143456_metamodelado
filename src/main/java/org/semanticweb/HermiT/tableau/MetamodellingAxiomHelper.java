@@ -72,6 +72,8 @@ public class MetamodellingAxiomHelper {
 	}
 	
 	// retorna las clases que estan en metamodelling con el individuo pasado como parametro
+	// { a=mA, a=mP, a=mR } -> [A,P,R]
+	// { a=mA, b=mB, a=b } -> [A,B]
 	public static List<OWLClassExpression> getMetamodellingClassesByIndividual(Individual ind, DLOntology ontology) {
 		List<OWLClassExpression> classes = new ArrayList<OWLClassExpression>();
 		if (ind != null) {

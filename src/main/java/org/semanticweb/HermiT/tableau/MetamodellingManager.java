@@ -217,9 +217,9 @@ public final class MetamodellingManager {
     		Node metamodellingNode = getMetamodellingNodeFromIndividual(metamodellingAxiom.getMetamodelIndividual());
     		// iteration over axioms MetaRule (<#R> <#S>)
     		for (OWLMetaRuleAxiom mrAxiom : this.m_tableau.m_permanentDLOntology.getMetaRuleAxioms()) {
-    			// <#R>
+    			// get property <#R> of MetaRule (<#R> <#S>)
     			String metaRulePropertyR = mrAxiom.getPropertyR().toString();
-    			// R(a,b1), R(a,b2), ... , R(a,bn) and bi = m Bi -> [b1,b2, ... ,bn] 
+    			// get nodes [b1,b2, ... ,bn] / R(a,b1), R(a,b2), ... , R(a,bn) and bi = m Bi 
     			List<Node> relatedNodes = this.m_tableau.getRelatedNodes(metamodellingNode, metaRulePropertyR);
     			if (relatedNodes.size() > 0) {
     				// b1 = m B1, b2 = m B2, ... , bn = m Bn -> [B1,B2, ... ,Bn]
