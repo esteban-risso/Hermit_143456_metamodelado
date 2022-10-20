@@ -275,6 +275,21 @@ implements Serializable {
         if (this.m_tableauMonitor != null) {
             this.m_tableauMonitor.tableauCleared();
         }
+        
+        this.nodeToMetaIndividual.clear();
+        this.metamodellingNodes.clear();
+        this.mapNodeIndividual.clear();
+        this.mapNodeIdtoNodes.clear();
+        this.createdDisjunction.clear();
+        this.closeMetaRuleDisjunctionsMap.clear();
+        this.differentIndividualsMap.clear();
+        
+        this.nodeRelations.clear();
+        this.classOfMetamodellingAxiom.clear();
+        this.metaIndividualToNodeID.clear();
+        this.m_unrelatedNodes.clear();
+
+        
     }
 
     public boolean supportsAdditionalDLOntology(DLOntology additionalDLOntology) {
@@ -1021,6 +1036,8 @@ implements Serializable {
         ++this.m_numberOfMergedOrPrunedNodes;
         this.m_existentialExpansionStrategy.nodeStatusChanged(node);
         this.m_existentialExpansionStrategy.nodesMerged(node, mergeInto);
+//        System.out.print(node+ " merge Into " +mergeInto);
+//        System.out.println();
     }
 
     public void pruneNode(Node node) {

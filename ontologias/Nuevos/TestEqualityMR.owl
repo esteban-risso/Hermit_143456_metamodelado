@@ -35,6 +35,10 @@
         <Class IRI="#A2"/>
     </Declaration>
      <Declaration>
+        <Class IRI="#R"/>
+    </Declaration>
+    
+     <Declaration>
         <Class IRI="#A3"/>
     </Declaration>
 
@@ -53,7 +57,12 @@
         <NamedIndividual IRI="#a2"/>
     </SameIndividual>
 
-   
+	<ObjectPropertyAssertion>
+        <ObjectProperty IRI="#R"/>
+        <NamedIndividual IRI="#a1"/>
+        <NamedIndividual IRI="#a2"/>
+    </ObjectPropertyAssertion>
+    
 	<MetaModelling>
         <NamedIndividual IRI="#a1"/>
         <Class IRI="#A11"/>
@@ -76,9 +85,7 @@
         <NamedIndividual IRI="#a3"/>
         <Class IRI="#A3"/>
     </MetaModelling>
-    
 
-	
 </Ontology>
 
 
