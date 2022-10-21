@@ -1283,14 +1283,14 @@ public class MetamodellingTests extends TestCase {
 		TestCase.assertEquals(true, true);
 	}
 	
-	public void testCash() {
-		CommandLine cl = new CommandLine();
-		flags.add(testCasesPath+"Nuevos/TestCash.owl");
-		cl.main(flags.toArray(new String[flagsCount+1]));
-		System.out.println("TestEqualityMR es consistente");
-		
-		flags.remove(flagsCount);
-		TestCase.assertEquals(true, true);
-	}
+//	public void testCash() {
+//		CommandLine cl = new CommandLine();
+//		flags.add(testCasesPath+"Nuevos/TestCash.owl");
+//		cl.main(flags.toArray(new String[flagsCount+1]));
+//		System.out.println("TestEqualityMR es consistente");
+//		
+//		flags.remove(flagsCount);
+//		TestCase.assertEquals(true, true);
+//	}
 	
 }
