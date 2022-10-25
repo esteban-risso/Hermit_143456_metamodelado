@@ -1,0 +1,484 @@
+<?xml version="1.0"?>
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://www.semanticweb.org/usuario/ontologies/2018/2/untitled-ontology-242"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     ontologyIRI="http://www.semanticweb.org/usuario/ontologies/2018/2/untitled-ontology-242">
+    <Prefix name="" IRI="http://www.semanticweb.org/usuario/ontologies/2018/2/untitled-ontology-242"/>
+    <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <Prefix name="xml" IRI="http://www.w3.org/XML/1998/namespace"/>
+    <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
+    <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+    <Declaration>
+        <Class IRI="#MonthLandlordDet"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#payBankDet"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#detailDefD"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#detailDef"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#juanMonthDebt"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#monthLandlordDet"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#EntryDef"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#juanMonthFee"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#RenterPayEnt"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#monthFeeDet"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#PayDebtDet"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#detailD"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#juanCashPay"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#PayCashDet"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#juanDebtPay"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#payDebtDet"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#payCashDet"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#MonthDebtDet"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#juanPay"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Entry"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#juanMonthLandlord"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#DetDef"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#monthDebtDet"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#monthRent"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#PayBankDet"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#detailDefC"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#renterPay"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#juanMonthRent"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#MonthRentEnt"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#detail"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#detailC"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#MonthFeeDet"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Det"/>
+    </Declaration>
+    <SubClassOf>
+        <Class IRI="#Det"/>
+        <ObjectExactCardinality cardinality="1">
+            <ObjectInverseOf>
+                <ObjectProperty IRI="#detail"/>
+            </ObjectInverseOf>
+            <Class IRI="#Entry"/>
+        </ObjectExactCardinality>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#DetDef"/>
+        <ObjectExactCardinality cardinality="1">
+            <ObjectInverseOf>
+                <ObjectProperty IRI="#detailDef"/>
+            </ObjectInverseOf>
+            <Class IRI="#EntryDef"/>
+        </ObjectExactCardinality>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Entry"/>
+        <ObjectIntersectionOf>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#detailC"/>
+                <Class abbreviatedIRI="owl:Thing"/>
+            </ObjectSomeValuesFrom>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#detailD"/>
+                <Class abbreviatedIRI="owl:Thing"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Entry"/>
+        <ObjectAllValuesFrom>
+            <ObjectProperty IRI="#detail"/>
+            <ObjectUnionOf>
+                <ObjectSomeValuesFrom>
+                    <ObjectInverseOf>
+                        <ObjectProperty IRI="#detailC"/>
+                    </ObjectInverseOf>
+                    <Class IRI="#Entry"/>
+                </ObjectSomeValuesFrom>
+                <ObjectSomeValuesFrom>
+                    <ObjectInverseOf>
+                        <ObjectProperty IRI="#detailD"/>
+                    </ObjectInverseOf>
+                    <Class IRI="#Entry"/>
+                </ObjectSomeValuesFrom>
+            </ObjectUnionOf>
+        </ObjectAllValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#EntryDef"/>
+        <ObjectIntersectionOf>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#detailDefC"/>
+                <Class abbreviatedIRI="owl:Thing"/>
+            </ObjectSomeValuesFrom>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#detailDefD"/>
+                <Class abbreviatedIRI="owl:Thing"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#EntryDef"/>
+        <ObjectAllValuesFrom>
+            <ObjectProperty IRI="#detailDef"/>
+            <ObjectUnionOf>
+                <ObjectSomeValuesFrom>
+                    <ObjectInverseOf>
+                        <ObjectProperty IRI="#detailDefC"/>
+                    </ObjectInverseOf>
+                    <Class IRI="#EntryDef"/>
+                </ObjectSomeValuesFrom>
+                <ObjectSomeValuesFrom>
+                    <ObjectInverseOf>
+                        <ObjectProperty IRI="#detailDefD"/>
+                    </ObjectInverseOf>
+                    <Class IRI="#EntryDef"/>
+                </ObjectSomeValuesFrom>
+            </ObjectUnionOf>
+        </ObjectAllValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MonthDebtDet"/>
+        <Class IRI="#Det"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MonthFeeDet"/>
+        <Class IRI="#Det"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MonthLandlordDet"/>
+        <Class IRI="#Det"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MonthRentEnt"/>
+        <Class IRI="#Entry"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MonthRentEnt"/>
+        <ObjectAllValuesFrom>
+            <ObjectProperty IRI="#detailC"/>
+            <Class IRI="#MonthLandlordDet"/>
+        </ObjectAllValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MonthRentEnt"/>
+        <ObjectAllValuesFrom>
+            <ObjectProperty IRI="#detailD"/>
+            <ObjectUnionOf>
+                <Class IRI="#MonthDebtDet"/>
+                <Class IRI="#MonthFeeDet"/>
+            </ObjectUnionOf>
+        </ObjectAllValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#PayBankDet"/>
+        <Class IRI="#Det"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#PayCashDet"/>
+        <Class IRI="#Det"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#PayDebtDet"/>
+        <Class IRI="#Det"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#RenterPayEnt"/>
+        <Class IRI="#Entry"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#RenterPayEnt"/>
+        <ObjectAllValuesFrom>
+            <ObjectProperty IRI="#detailC"/>
+            <Class IRI="#PayDebtDet"/>
+        </ObjectAllValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#RenterPayEnt"/>
+        <ObjectAllValuesFrom>
+            <ObjectProperty IRI="#detailD"/>
+            <ObjectUnionOf>
+                <Class IRI="#PayBankDet"/>
+                <Class IRI="#PayCashDet"/>
+            </ObjectUnionOf>
+        </ObjectAllValuesFrom>
+    </SubClassOf>
+    <DisjointClasses>
+        <Class IRI="#Det"/>
+        <Class IRI="#DetDef"/>
+        <Class IRI="#Entry"/>
+        <Class IRI="#EntryDef"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="#MonthDebtDet"/>
+        <Class IRI="#MonthFeeDet"/>
+        <Class IRI="#MonthLandlordDet"/>
+        <Class IRI="#PayBankDet"/>
+        <Class IRI="#PayCashDet"/>
+        <Class IRI="#PayDebtDet"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="#MonthRentEnt"/>
+        <Class IRI="#RenterPayEnt"/>
+    </DisjointClasses>
+    <ClassAssertion>
+        <Class IRI="#PayCashDet"/>
+        <NamedIndividual IRI="#juanCashPay"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#PayDebtDet"/>
+        <NamedIndividual IRI="#juanDebtPay"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#MonthDebtDet"/>
+        <NamedIndividual IRI="#juanMonthDebt"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#MonthFeeDet"/>
+        <NamedIndividual IRI="#juanMonthFee"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#MonthLandlordDet"/>
+        <NamedIndividual IRI="#juanMonthLandlord"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#MonthRentEnt"/>
+        <NamedIndividual IRI="#juanMonthRent"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#RenterPayEnt"/>
+        <NamedIndividual IRI="#juanPay"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#DetDef"/>
+        <NamedIndividual IRI="#monthDebtDet"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#DetDef"/>
+        <NamedIndividual IRI="#monthFeeDet"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#DetDef"/>
+        <NamedIndividual IRI="#monthLandlordDet"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#EntryDef"/>
+        <NamedIndividual IRI="#monthRent"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#DetDef"/>
+        <NamedIndividual IRI="#payBankDet"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#DetDef"/>
+        <NamedIndividual IRI="#payCashDet"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#DetDef"/>
+        <NamedIndividual IRI="#payDebtDet"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#EntryDef"/>
+        <NamedIndividual IRI="#renterPay"/>
+    </ClassAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#detailC"/>
+        <NamedIndividual IRI="#juanMonthRent"/>
+        <NamedIndividual IRI="#juanMonthLandlord"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#detailD"/>
+        <NamedIndividual IRI="#juanMonthRent"/>
+        <NamedIndividual IRI="#juanMonthDebt"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#detailD"/>
+        <NamedIndividual IRI="#juanMonthRent"/>
+        <NamedIndividual IRI="#juanMonthFee"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#detailC"/>
+        <NamedIndividual IRI="#juanPay"/>
+        <NamedIndividual IRI="#juanDebtPay"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#detailD"/>
+        <NamedIndividual IRI="#juanPay"/>
+        <NamedIndividual IRI="#juanCashPay"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#detailDefC"/>
+        <NamedIndividual IRI="#monthRent"/>
+        <NamedIndividual IRI="#monthLandlordDet"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#detailDefD"/>
+        <NamedIndividual IRI="#monthRent"/>
+        <NamedIndividual IRI="#monthDebtDet"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#detailDefD"/>
+        <NamedIndividual IRI="#monthRent"/>
+        <NamedIndividual IRI="#monthFeeDet"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#detailDefC"/>
+        <NamedIndividual IRI="#renterPay"/>
+        <NamedIndividual IRI="#payDebtDet"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#detailDefD"/>
+        <NamedIndividual IRI="#renterPay"/>
+        <NamedIndividual IRI="#payBankDet"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#detailDefD"/>
+        <NamedIndividual IRI="#renterPay"/>
+        <NamedIndividual IRI="#payCashDet"/>
+    </ObjectPropertyAssertion>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#detailC"/>
+        <ObjectProperty IRI="#detail"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#detailD"/>
+        <ObjectProperty IRI="#detail"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#detailDefC"/>
+        <ObjectProperty IRI="#detailDef"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#detailDefD"/>
+        <ObjectProperty IRI="#detailDef"/>
+    </SubObjectPropertyOf>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#detail"/>
+        <Class IRI="#Entry"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#detailDef"/>
+        <Class IRI="#EntryDef"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#detail"/>
+        <Class IRI="#Det"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#detailDef"/>
+        <Class IRI="#DetDef"/>
+    </ObjectPropertyRange>
+	<MetaModelling>
+        <NamedIndividual IRI="#monthRent"/>
+        <Class IRI="#MonthRentEnt"/>
+    </MetaModelling>
+	<MetaModelling>
+        <NamedIndividual IRI="#monthFeeDet"/>
+        <Class IRI="#MonthFeeDet"/>
+    </MetaModelling>
+	<MetaModelling>
+        <NamedIndividual IRI="#monthDebtDet"/>
+        <Class IRI="#MonthDebtDet"/>
+    </MetaModelling>
+	<MetaModelling>
+        <NamedIndividual IRI="#monthLandlordDet"/>
+        <Class IRI="#MonthLandlordDet"/>
+    </MetaModelling>
+	<MetaModelling>
+        <NamedIndividual IRI="#renterPay"/>
+        <Class IRI="#RenterPayEnt"/>
+    </MetaModelling>
+	<MetaModelling>
+        <NamedIndividual IRI="#payBankDet"/>
+        <Class IRI="#PayBankDet"/>
+    </MetaModelling>
+	<MetaModelling>
+        <NamedIndividual IRI="#payCashDet"/>
+        <Class IRI="#PayCashDet"/>
+    </MetaModelling>
+	<MetaModelling>
+        <NamedIndividual IRI="#payDebtDet"/>
+        <Class IRI="#PayDebtDet"/>
+    </MetaModelling>
+	<Declaration>
+        <NamedIndividual IRI="#x"/>
+    </Declaration>
+	<Declaration>
+        <Class IRI="#X"/>
+    </Declaration>
+	<ClassAssertion>
+        <Class IRI="#EntryDef"/>
+        <NamedIndividual IRI="#x"/>
+    </ClassAssertion>
+	<SameIndividual>
+        <NamedIndividual IRI="#renterPay"/>
+        <NamedIndividual IRI="#x"/>
+    </SameIndividual>
+	<MetaModelling>
+        <NamedIndividual IRI="#x"/>
+        <Class IRI="#X"/>
+    </MetaModelling>
+</Ontology>
+
+
+
+<!-- Generated by the OWL API (version 4.2.5.20160517-0735) https://github.com/owlcs/owlapi -->
+

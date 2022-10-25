@@ -277,13 +277,16 @@ implements Serializable {
         }
         
         this.nodeToMetaIndividual.clear();
+        // genera problemas al hacer clear debido al tema de los merges.
         this.metamodellingNodes.clear();
         this.mapNodeIndividual.clear();
         this.mapNodeIdtoNodes.clear();
         this.createdDisjunction.clear();
         this.closeMetaRuleDisjunctionsMap.clear();
-        this.differentIndividualsMap.clear();  
-        this.nodeRelations.clear();
+        // no tengo que limpiarlo
+//        this.differentIndividualsMap.clear(); 
+        // genera problemas al hacer clear
+//        this.nodeRelations.clear();
         this.classOfMetamodellingAxiom.clear();
         this.metaIndividualToNodeID.clear();
         this.m_unrelatedNodes.clear(); 
@@ -354,6 +357,8 @@ implements Serializable {
         if (this.m_tableauMonitor != null) {
             this.m_tableauMonitor.isSatisfiableStarted(reasoningTaskDescription);
         }
+        System.out.print("Nueva iteracion");
+        System.out.println();
         this.clear();
         for (OWLMetamodellingAxiom metamodellingAxiom : this.m_permanentDLOntology.getMetamodellingAxioms()) {
         	Individual ind = Individual.create(metamodellingAxiom.getMetamodelIndividual().toStringID());
@@ -833,8 +838,13 @@ implements Serializable {
     }
 
     protected boolean areSameIndividual(Node node1, Node node2) {
-    	if ((node1.m_nodeID == node2.m_nodeID) || (node1.getCanonicalNode() == node2.getCanonicalNode())) return true;
-    	if ((node1.isMerged() && node1.m_mergedInto == node2) || (node2.isMerged() && node2.m_mergedInto == node1)) return true;
+    	// MIO
+    	System.out.print(node1+ " es igual a " +node2+"?");
+    	System.out.println();
+    	if ((node1.m_nodeID == node2.m_nodeID) || (node1.getCanonicalNode() == node2.getCanonicalNode())) { System.out.print("Si"); System.out.println(); return true;}
+    	if ((node1.isMerged() && node1.m_mergedInto == node2) || (node2.isMerged() && node2.m_mergedInto == node1)) { System.out.print("Si"); System.out.println(); return true;}
+    	System.out.print("No");
+    	System.out.println();
     	return false;
     }
     
@@ -1033,8 +1043,8 @@ implements Serializable {
         ++this.m_numberOfMergedOrPrunedNodes;
         this.m_existentialExpansionStrategy.nodeStatusChanged(node);
         this.m_existentialExpansionStrategy.nodesMerged(node, mergeInto);
-//        System.out.print(node+ " merge Into " +mergeInto);
-//        System.out.println();
+        System.out.print(node+ " merge Into " +mergeInto);
+        System.out.println();
     }
 
     public void pruneNode(Node node) {
