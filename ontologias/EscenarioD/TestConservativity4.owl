@@ -52,15 +52,6 @@
             <Class IRI="#A"/>
         </ObjectSomeValuesFrom>
     </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#C"/>
-        <ObjectAllValuesFrom>
-            <ObjectProperty IRI="#R"/>
-            <ObjectComplementOf>
-                <Class IRI="#B"/>
-            </ObjectComplementOf>
-        </ObjectAllValuesFrom>
-    </SubClassOf>
     <ClassAssertion>
         <Class IRI="#A"/>
         <NamedIndividual IRI="#p"/>

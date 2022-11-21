@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+
+import org.semanticweb.HermiT.model.AtLeastConcept;
 import org.semanticweb.HermiT.model.Atom;
 import org.semanticweb.HermiT.model.AtomicConcept;
 import org.semanticweb.HermiT.model.AtomicRole;
@@ -14,6 +16,7 @@ import org.semanticweb.HermiT.model.DLClause;
 import org.semanticweb.HermiT.model.DLOntology;
 import org.semanticweb.HermiT.model.Individual;
 import org.semanticweb.HermiT.model.LiteralConcept;
+import org.semanticweb.HermiT.model.Role;
 import org.semanticweb.HermiT.model.Variable;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLMetamodellingAxiom;
@@ -87,6 +90,7 @@ public class MetamodellingAxiomHelper {
 	}
 	
 	public static void addMetaRuleAddedAxiom(String classA, String propertyS, List<String> classesFromImage, Tableau tableau) {
+		
 		String defClass = DEF_STRING + getNextDef(tableau.getPermanentDLOntology()) + ">";
 		
 		// <internal:def#i>(Y)

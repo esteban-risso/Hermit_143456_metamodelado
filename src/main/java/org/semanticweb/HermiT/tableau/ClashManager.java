@@ -1,6 +1,7 @@
 package org.semanticweb.HermiT.tableau;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import org.semanticweb.HermiT.model.AtomicConcept;
 import org.semanticweb.HermiT.model.AtomicNegationConcept;
@@ -57,6 +58,7 @@ implements Serializable {
                         this.m_tableauMonitor.clashDetectionStarted(new Object[][]{tuple});
                     }
                     this.m_extensionManager.setClash(dependencySet);
+                    System.out.print(dlPredicateObject.toString()+" "+node0.m_nodeID);
                     if (this.m_tableauMonitor != null) {
                         this.m_tableauMonitor.clashDetectionFinished(new Object[][]{tuple});
                     }
@@ -72,6 +74,7 @@ implements Serializable {
                     this.m_tableauMonitor.clashDetectionStarted(tuple, this.m_binaryAuxiliaryTuple);
                 }
                 this.m_extensionManager.setClash(this.m_binaryUnionDependencySet);
+                System.out.print(dlPredicateObject.toString()+" "+node0.m_nodeID);
                 if (this.m_tableauMonitor == null) break block14;
                 this.m_tableauMonitor.clashDetectionFinished(tuple, this.m_binaryAuxiliaryTuple);
                 break block14;
@@ -88,6 +91,7 @@ implements Serializable {
                         this.m_tableauMonitor.clashDetectionStarted(tuple, this.m_ternaryAuxiliaryTuple);
                     }
                     this.m_extensionManager.setClash(this.m_binaryUnionDependencySet);
+                    System.out.print(dlPredicateObject.toString()+" "+node0.m_nodeID+" ");
                     if (this.m_tableauMonitor != null) {
                         this.m_tableauMonitor.clashDetectionFinished(tuple, this.m_ternaryAuxiliaryTuple);
                     }
@@ -99,6 +103,8 @@ implements Serializable {
                     this.m_ternaryExtensionTableSearch01Bound.getBindingsBuffer()[1] = tuple[1];
                     this.m_ternaryExtensionTableSearch01Bound.open();
                     Object[] tupleBuffer = this.m_ternaryExtensionTableSearch01Bound.getTupleBuffer();
+                    System.out.print("CLASHHHHHHHHHHHHH");
+
                     while (!this.m_ternaryExtensionTableSearch01Bound.afterLast()) {
                         assert (!((Node)tupleBuffer[2]).getNodeType().isAbstract());
                         this.m_ternaryAuxiliaryTuple[2] = tupleBuffer[2];

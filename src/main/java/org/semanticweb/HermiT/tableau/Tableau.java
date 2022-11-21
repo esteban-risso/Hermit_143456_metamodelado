@@ -87,8 +87,6 @@ implements Serializable {
     protected Map<String,Integer> metaIndividualToNodeID;
     protected Map<Integer,Map<String, List<Integer>>> m_unrelatedNodes;
 
-
-
     public Tableau(InterruptFlag interruptFlag, TableauMonitor tableauMonitor, ExistentialExpansionStrategy existentialsExpansionStrategy, boolean useDisjunctionLearning, DLOntology permanentDLOntology, DLOntology additionalDLOntology, Map<String, Object> parameters) {
         if (additionalDLOntology != null && !additionalDLOntology.getAllDescriptionGraphs().isEmpty()) {
             throw new IllegalArgumentException("Additional ontology cannot contain description graphs.");
@@ -132,7 +130,7 @@ implements Serializable {
             this.nodeRelations = new HashMap<Integer,Map<String, List<Integer>>>();
             this.classOfMetamodellingAxiom = new HashMap<Integer, Set<String>>();
             this.metaIndividualToNodeID = new HashMap<String, Integer>();
-            this.m_unrelatedNodes = new HashMap<Integer,Map<String, List<Integer>>>();
+            this.m_unrelatedNodes = new HashMap<Integer,Map<String, List<Integer>>>();          
             
             BranchedHyperresolutionManager branchedHypM = new BranchedHyperresolutionManager();
             branchedHypM.setHyperresolutionManager(this.m_permanentHyperresolutionManager);
@@ -276,20 +274,20 @@ implements Serializable {
             this.m_tableauMonitor.tableauCleared();
         }
         
-        this.nodeToMetaIndividual.clear();
-        // genera problemas al hacer clear debido al tema de los merges.
-        this.metamodellingNodes.clear();
-        this.mapNodeIndividual.clear();
-        this.mapNodeIdtoNodes.clear();
-        this.createdDisjunction.clear();
-        this.closeMetaRuleDisjunctionsMap.clear();
-        // no tengo que limpiarlo
-//        this.differentIndividualsMap.clear(); 
-        // genera problemas al hacer clear
-//        this.nodeRelations.clear();
-        this.classOfMetamodellingAxiom.clear();
-        this.metaIndividualToNodeID.clear();
-        this.m_unrelatedNodes.clear(); 
+//        this.nodeToMetaIndividual.clear();
+//        // genera problemas al hacer clear debido al tema de los merges.
+////        this.metamodellingNodes.clear();
+//        this.mapNodeIndividual.clear();
+//        this.mapNodeIdtoNodes.clear();
+//        this.createdDisjunction.clear();
+//        this.closeMetaRuleDisjunctionsMap.clear();
+//        // no tengo que limpiarlo
+////        this.differentIndividualsMap.clear(); 
+//        // genera problemas al hacer clear
+////        this.nodeRelations.clear();
+//        this.classOfMetamodellingAxiom.clear();
+//        this.metaIndividualToNodeID.clear();
+////        this.m_unrelatedNodes.clear(); 
     }
 
     public boolean supportsAdditionalDLOntology(DLOntology additionalDLOntology) {
@@ -371,6 +369,9 @@ implements Serializable {
         	this.nodeToMetaIndividual.put(termsToNodes.get(ind).m_nodeID, ind);
         	this.mapNodeIdtoNodes.put(termsToNodes.get(ind).m_nodeID, termsToNodes.get(ind));
         	this.metamodellingNodes.add(termsToNodes.get(ind));
+//        	if (this.metamodellingNodes.size() != this.m_permanentDLOntology.getMetamodellingAxioms().size()) {
+//            	this.metamodellingNodes.add(termsToNodes.get(ind));
+//        	}
         	this.classOfMetamodellingAxiom.putIfAbsent(termsToNodes.get(ind).m_nodeID, new HashSet<String>());
         	this.classOfMetamodellingAxiom.get(termsToNodes.get(ind).m_nodeID).add(metamodellingAxiom.getModelClass().toString());
         }
@@ -729,7 +730,13 @@ implements Serializable {
 				for (int j=0; j<this.branchedHyperresolutionManagers.get(this.branchedHyperresolutionManagers.size()-i).getDlClausesAdded().size(); j++) {
 					DLClause dlClauseAdded = this.branchedHyperresolutionManagers.get(this.branchedHyperresolutionManagers.size()-i).getDlClausesAdded().get(j);
 					removeFromInequalityMetamodellingPairs(i, j, dlClauseAdded);
+					String head = dlClauseAdded.getHeadAtom(0).toString();
+					String body = dlClauseAdded.getBodyAtom(0).toString();
+					System.out.print("Se remueve "+head+" mas "+body);
+					System.out.println();
 					this.getPermanentDLOntology().getDLClauses().remove(dlClauseAdded);
+					System.out.print(dlClauseAdded);
+					System.out.println();
 					this.setPermanentHyperresolutionManager(this.branchedHyperresolutionManagers.get(this.branchedHyperresolutionManagers.size()-i).getHyperresolutionManager());
 				}
 			}
@@ -838,13 +845,18 @@ implements Serializable {
     }
 
     protected boolean areSameIndividual(Node node1, Node node2) {
-    	// MIO
-    	System.out.print(node1+ " es igual a " +node2+"?");
-    	System.out.println();
-    	if ((node1.m_nodeID == node2.m_nodeID) || (node1.getCanonicalNode() == node2.getCanonicalNode())) { System.out.print("Si"); System.out.println(); return true;}
-    	if ((node1.isMerged() && node1.m_mergedInto == node2) || (node2.isMerged() && node2.m_mergedInto == node1)) { System.out.print("Si"); System.out.println(); return true;}
-    	System.out.print("No");
-    	System.out.println();
+//    	System.out.print(node1+ " es igual a " +node2+"?");
+//    	System.out.println();
+    	if ((node1.m_nodeID == node2.m_nodeID) || (node1.getCanonicalNode() == node2.getCanonicalNode())) { 
+//    		System.out.print("Si"); 
+//    		System.out.println(); 
+    		return true;}
+    	if ((node1.isMerged() && node1.m_mergedInto == node2) || (node2.isMerged() && node2.m_mergedInto == node1)) { 
+//    		System.out.print("Si"); 
+//    		System.out.println(); 
+    		return true;}
+//    	System.out.print("No");
+//    	System.out.println();
     	return false;
     }
     
@@ -1046,7 +1058,7 @@ implements Serializable {
         System.out.print(node+ " merge Into " +mergeInto);
         System.out.println();
     }
-
+    
     public void pruneNode(Node node) {
         assert (node.m_nodeState == Node.NodeState.ACTIVE);
         assert (node.m_mergedInto == null);
