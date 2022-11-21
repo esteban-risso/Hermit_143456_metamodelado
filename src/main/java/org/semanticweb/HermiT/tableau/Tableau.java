@@ -276,20 +276,6 @@ implements Serializable {
             this.m_tableauMonitor.tableauCleared();
         }
         
-        this.nodeToMetaIndividual.clear();
-        this.metamodellingNodes.clear();
-        this.mapNodeIndividual.clear();
-        this.mapNodeIdtoNodes.clear();
-        this.createdDisjunction.clear();
-        this.closeMetaRuleDisjunctionsMap.clear();
-        this.differentIndividualsMap.clear();
-        
-        this.nodeRelations.clear();
-        this.classOfMetamodellingAxiom.clear();
-        this.metaIndividualToNodeID.clear();
-        this.m_unrelatedNodes.clear();
-
-        
     }
 
     public boolean supportsAdditionalDLOntology(DLOntology additionalDLOntology) {
