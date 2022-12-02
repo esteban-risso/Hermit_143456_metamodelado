@@ -197,36 +197,11 @@ implements Serializable {
         }
         
         if (tuple.length > 2) {
-        	Node node0toDelete = null;
-            Node node1toDelete = null;
-            int j = -1;
-            boolean flag = false;
+        	Node node0 = (Node)tuple[1];
+        	Node node1 = (Node)tuple[2];
             if (tuple[0].toString().equals("!=")) {
-            	Node node0 = (Node) tuple[1];
-            	Node node1 = (Node) tuple[2];
-            	for (Integer node0iter : this.m_tableau.differentIndividualsMap.keySet()) {
-            		if (node0iter == node0.m_nodeID) {
-            			j = 0;
-            			for (Integer node1iter : this.m_tableau.differentIndividualsMap.get(node0.m_nodeID)) {
-            				if (node1iter == node1.m_nodeID) {
-            					node0toDelete = node0;
-            					node1toDelete = node1;
-            					flag = true;
-            					break;
-            				}
-            				j++;
-            			}
-            		}
-            		if (flag) {
-            			break;
-            		}
-            	}
-            	if (node0toDelete != null && node1toDelete != null) {
-                    this.m_tableau.differentIndividualsMap.get(node0toDelete.m_nodeID).remove(j);
-                }
+                this.m_tableau.differentIndividualsMap.get(node0.m_nodeID).remove(Integer.valueOf(node1.m_nodeID));
             } else {
-            	Node node0 = (Node)tuple[1];
-            	Node node1 = (Node)tuple[2];
         		String property = tuple[0].toString();
         		// R(a,b)
         		if (!property.contains("~")) {
